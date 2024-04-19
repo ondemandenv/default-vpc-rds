@@ -1,0 +1,21 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "main": "app.js",
+  "devDependencies": {
+    "@types/node": "^20.10.5",
+    "@types/js-yaml": "^4.0.9",
+    "@types/aws-lambda": "^8.10.130",
+    "@types/pg": "^8.10.9",
+    "pg": "8.11.3",
+    "@aws-sdk/client-secrets-manager": "^3.480.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "clean": "tsc --build --clean",
+    "watch": "tsc --build -w",
+    "ts": "tsc --build --clean && tsc --build && ts-node debug.ts"
+  }
+}
