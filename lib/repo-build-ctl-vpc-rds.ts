@@ -1,5 +1,5 @@
 import {Port, SecurityGroup, SelectedSubnets, SubnetType} from "aws-cdk-lib/aws-ec2";
-import {RepoBuildCtlVpcStack} from "./repo-build-ctl-vpc-stack";
+import {RepoBuildCtlVpc} from "./repo-build-ctl-vpc";
 import {AuroraPostgresEngineVersion, Credentials, DatabaseClusterEngine, ServerlessCluster} from "aws-cdk-lib/aws-rds";
 import {NodejsFunction} from "aws-cdk-lib/aws-lambda-nodejs";
 import {Policy, PolicyStatement} from "aws-cdk-lib/aws-iam";
@@ -8,25 +8,26 @@ import * as path from "node:path";
 import {App, CfnOutput, Duration, Stack} from "aws-cdk-lib";
 import {RetentionDays} from "aws-cdk-lib/aws-logs";
 import {Provider} from "aws-cdk-lib/custom-resources";
-import * as odmd from "@ondemandenv/odmd-contracts";
-import {ContractsRdsCluster} from "@ondemandenv/odmd-contracts";
+import {RepoBuildCtlVpcRdsSchusrs} from "./repo-build-ctl-vpc-rds-schusrs";
 import {
-    ContractsEnverCdkDefaultVpcRds
-} from "@ondemandenv/odmd-contracts/lib/repos/_default-vpc-rds/odmd-build-default-vpc-rds";
+    AnyContractsEnVer,
+    ContractsCrossRefProducer,
+    ContractsRdsCluster,
+    GET_PG_USR_ROLE_PROVIDER_NAME
+} from "@ondemandenv/odmd-contracts";
 
 
-export class RepoBuildCtlVpcRdsStack extends Stack{
+export class RepoBuildCtlVpcRds extends Stack {
 
-    private readonly vpcStack: RepoBuildCtlVpcStack
+    private readonly vpcStack: RepoBuildCtlVpc
     private readonly schUsrFun: NodejsFunction
     private readonly rdsCluster: ServerlessCluster;
 
-    constructor(parent: App, vpcStack: RepoBuildCtlVpcStack, m: ContractsEnverCdkDefaultVpcRds) {
-        const rds = m.rdsConfig!
+    constructor(parent: App, vpcStack: RepoBuildCtlVpc, rds: ContractsRdsCluster) {
         super(parent, vpcStack.stackName + '-RDS-' + rds.clusterIdentifier);
         this.vpcStack = vpcStack;
 
-        const pid = `odmd-${m.owner.buildId}-${rds.vpc.vpcName}`
+        const pid = `odmd-${rds.vpc.build.buildId}-${rds.vpc.vpcName}`
         let rdsSubnets: SelectedSubnets;
         try {
             rdsSubnets = this.vpcStack.vpc.selectSubnets({subnetType: SubnetType.PRIVATE_WITH_EGRESS});
@@ -52,8 +53,9 @@ export class RepoBuildCtlVpcRdsStack extends Stack{
             credentials: Credentials.fromGeneratedSecret(rds.rootUsername, {secretName: rds.rootSecretName}),
         })
 
-        const exportPgUsrProviderName = odmd.GET_PG_USR_ROLE_PROVIDER_NAME(m.owner.buildId, process.env.CDK_DEFAULT_REGION!,
-            m.targetAWSAccountID, rds.vpc.vpcName)
+
+        const exportPgUsrProviderName = GET_PG_USR_ROLE_PROVIDER_NAME(rds.vpc.build.buildId, process.env.CDK_DEFAULT_REGION!,
+            this.account, rds.vpc.vpcName)
 
         const usrFuncSg = new SecurityGroup(this, 'usr-fun-sg', {
             vpc: vpcStack.vpc,
@@ -64,7 +66,7 @@ export class RepoBuildCtlVpcRdsStack extends Stack{
                         postgresHostname: rdsCluster.clusterEndpoint.hostname,
                         postgresHostport: rdsCluster.clusterEndpoint.port,
                         databaseName: rds.defaultDatabaseName,*/
-        const secretPath = 'odmd-/' + m.owner.buildId + '/' + rds.clusterIdentifier;
+        const secretPath = 'odmd-/' + rds.vpc.build.buildId + '/' + rds.clusterIdentifier;
         this.schUsrFun = new NodejsFunction(this, 'pg-usr-fun', {
             memorySize: 256,
             vpcSubnets: vpcStack.privateSubnets,
@@ -109,19 +111,16 @@ export class RepoBuildCtlVpcRdsStack extends Stack{
         })
 
 
-        const map = new Map<odmd.ContractsCrossRefProducer<odmd.AnyContractsEnVer>, string | number>([
+        const map = new Map<ContractsCrossRefProducer<AnyContractsEnVer>, string | number>([
             [rds.clusterHostname, this.rdsCluster.clusterEndpoint.hostname],
             [rds.clusterPort, this.rdsCluster.clusterEndpoint.port],
             [rds.clusterSocketAddress, this.rdsCluster.clusterEndpoint.socketAddress],
         ])
 
-        const pgUsrs = new odmd.PgSchemaUsers(this, rds.schemaRoleUsers!, true, provider.serviceToken)
-
-        rds.schemaRoleUsers!.userSecrets.forEach((us: odmd.PgUsr) => {
-            map.set(rds.usernameToSecretId.get(us.userName)!, pgUsrs.usernameToSecretId.get(us.userName)!)
+        rds.schemaRoleUsers.forEach(su => {
+            new RepoBuildCtlVpcRdsSchusrs(parent, rds, su)
         })
 
-        new odmd.ContractsShareOut(this, new Map<odmd.ContractsCrossRefProducer<odmd.AnyContractsEnVer>, string | number>(map))
     }
 
 }

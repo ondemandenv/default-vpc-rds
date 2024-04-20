@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
-import {RepoBuildCtlVpcStack} from "../lib/repo-build-ctl-vpc-stack";
+import {RepoBuildCtlVpc} from "../lib/repo-build-ctl-vpc";
 import {OndemandContracts} from "@ondemandenv/odmd-contracts";
 import {StackProps} from "aws-cdk-lib";
 
@@ -26,7 +26,7 @@ async function main() {
     } as StackProps;
 
 
-    const vpc = new RepoBuildCtlVpcStack(
+    const vpc = new RepoBuildCtlVpc(
         app, 'a1234', OndemandContracts.inst.defaultVpcRds.envers[0])
 
 }
