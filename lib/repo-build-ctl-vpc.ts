@@ -11,16 +11,16 @@ import {
 } from "aws-cdk-lib/aws-ec2";
 import {RepoBuildCtlVpcRds} from "./repo-build-ctl-vpc-rds";
 import {
-    ContractsEnverCdkDefaultVpc
-} from "@ondemandenv/odmd-contracts/lib/repos/_default-vpc-rds/odmd-enver-default-vpc-rds";
-import {
     AnyContractsEnVer,
-    ContractsCrossRefProducer,
+    ContractsCrossRefProducer, ContractsEnverCdk,
     ContractsShareIn,
     ContractsShareOut,
     OdmdNames,
     OndemandContracts
 } from "@ondemandenv/odmd-contracts";
+import {
+    ContractsEnverCdkDefaultVpc
+} from "@ondemandenv/odmd-contracts/lib/repos/_default-vpc-rds/odmd-enver-default-vpc-rds";
 
 
 export class RepoBuildCtlVpc extends Stack {
@@ -28,8 +28,8 @@ export class RepoBuildCtlVpc extends Stack {
     public readonly vpc: Vpc
     public readonly privateSubnets: SelectedSubnets;
 
-    constructor(parent: App, ctlId: string, m: ContractsEnverCdkDefaultVpc) {
-        super(parent, `${ctlId}-VPC-${m.vpcConfig.vpcName.replace(/[^a-zA-Z0-9]/g, '-')}`);
+    constructor(parent: App, m: ContractsEnverCdkDefaultVpc) {
+        super(parent, ContractsEnverCdk.SANITIZE_STACK_NAME(`${m.owner.buildId}--${m.targetRevision}-${m.vpcConfig.vpcName}`));
 
         if (m.owner.buildId == OndemandContracts.inst.networking.buildId) {
             throw new Error(`No vpc should be shared in ${OndemandContracts.inst.networking.buildId}`)
@@ -100,8 +100,8 @@ export class RepoBuildCtlVpc extends Stack {
         } else {
             console.warn(`No TGW ~~~~ for build:${m.owner.buildId}, vpc:${vpcProps.vpcName}`)
         }
-        if( m.rdsConfigs.length>0 ){
-            m.rdsConfigs.forEach(r=>{
+        if (m.rdsConfigs.length > 0) {
+            m.rdsConfigs.forEach(r => {
                 new RepoBuildCtlVpcRds(parent, this, r)
             })
         }

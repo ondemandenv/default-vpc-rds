@@ -11,7 +11,7 @@ import {Provider} from "aws-cdk-lib/custom-resources";
 import {RepoBuildCtlVpcRdsSchusrs} from "./repo-build-ctl-vpc-rds-schusrs";
 import {
     AnyContractsEnVer,
-    ContractsCrossRefProducer,
+    ContractsCrossRefProducer, ContractsEnverCdk,
     ContractsRdsCluster,
     GET_PG_USR_ROLE_PROVIDER_NAME
 } from "@ondemandenv/odmd-contracts";
@@ -24,7 +24,7 @@ export class RepoBuildCtlVpcRds extends Stack {
     private readonly rdsCluster: ServerlessCluster;
 
     constructor(parent: App, vpcStack: RepoBuildCtlVpc, rds: ContractsRdsCluster) {
-        super(parent, vpcStack.stackName + '-RDS-' + rds.clusterIdentifier);
+        super(parent, ContractsEnverCdk.SANITIZE_STACK_NAME(vpcStack.stackName + '-' + rds.clusterIdentifier));
         this.vpcStack = vpcStack;
 
         const pid = `odmd-${rds.vpc.build.buildId}-${rds.vpc.vpcName}`
@@ -118,7 +118,7 @@ export class RepoBuildCtlVpcRds extends Stack {
         ])
 
         rds.schemaRoleUsers.forEach(su => {
-            new RepoBuildCtlVpcRdsSchusrs(parent, rds, su)
+            new RepoBuildCtlVpcRdsSchusrs(parent, this.stackName, rds, su)
         })
 
     }

@@ -8,7 +8,7 @@
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
-    "cdk-sa": "tsc --build --clean && tsc --build && cross-env SRC_BRANCH=publish cdk synth --all --profile 590183907424_AdministratorAccess"
+    "cdk-sa": "tsc --build --clean && tsc --build && cross-env SRC_BRANCH=?? cdk synth --all --profile 590183907424_AdministratorAccess"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",
@@ -23,7 +23,7 @@
   "dependencies": {
     "aws-cdk-lib": "2.133.0",
     "constructs": "^10.0.0",
-    "@ondemandenv/odmd-contracts": "0.1.69",
+    "@ondemandenv/odmd-contracts": "0.1.70",
     "source-map-support": "^0.5.21"
   }
 }

@@ -18,16 +18,7 @@ async function main() {
         throw new Error("buildRegion>" + buildRegion + "; buildAccount>" + buildAccount)
     }
 
-    const props = {
-        env: {
-            account: buildAccount,
-            region: buildRegion
-        }
-    } as StackProps;
-
-
-    const vpc = new RepoBuildCtlVpc(
-        app, 'a1234', OndemandContracts.inst.defaultVpcRds.envers[0])
+    new RepoBuildCtlVpc(app, OndemandContracts.inst.defaultVpcRds.envers[0])
 
 }
 

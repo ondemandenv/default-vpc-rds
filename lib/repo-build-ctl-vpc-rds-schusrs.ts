@@ -1,7 +1,7 @@
 import {App, Stack} from "aws-cdk-lib";
 import {
     AnyContractsEnVer,
-    ContractsCrossRefProducer,
+    ContractsCrossRefProducer, ContractsEnverCdk,
     ContractsRdsCluster,
     ContractsShareOut,
     PgSchemaUsers,
@@ -10,8 +10,8 @@ import {
 
 
 export class RepoBuildCtlVpcRdsSchusrs extends Stack {
-    constructor(parent: App, rds: ContractsRdsCluster, m: PgSchemaUsersProps) {
-        super(parent, rds.clusterIdentifier + '-' + m.schema);
+    constructor(parent: App, pn: string, rds: ContractsRdsCluster, m: PgSchemaUsersProps) {
+        super(parent, ContractsEnverCdk.SANITIZE_STACK_NAME(pn + '-' + m.schema));
 
         const pgUsrs = new PgSchemaUsers(this, m, true)
 
