@@ -1,4 +1,4 @@
-import {App, Stack, Tags} from 'aws-cdk-lib'
+import {App, Stack, StackProps, Tags} from 'aws-cdk-lib'
 import {
     CfnRoute,
     CfnRouteTable,
@@ -28,8 +28,8 @@ export class RepoBuildCtlVpc extends Stack {
     public readonly vpc: Vpc
     public readonly privateSubnets: SelectedSubnets;
 
-    constructor(parent: App, m: ContractsEnverCdkDefaultVpc) {
-        super(parent, ContractsEnverCdk.SANITIZE_STACK_NAME(`${m.owner.buildId}--${m.targetRevision}-${m.vpcConfig.vpcName}`));
+    constructor(parent: App, m: ContractsEnverCdkDefaultVpc, props: StackProps) {
+        super(parent, ContractsEnverCdk.SANITIZE_STACK_NAME(`${m.owner.buildId}--${m.targetRevision}-${m.vpcConfig.vpcName}`), props);
 
         if (m.owner.buildId == OndemandContracts.inst.networking.buildId) {
             throw new Error(`No vpc should be shared in ${OndemandContracts.inst.networking.buildId}`)
@@ -102,7 +102,7 @@ export class RepoBuildCtlVpc extends Stack {
         }
         if (m.rdsConfigs.length > 0) {
             m.rdsConfigs.forEach(r => {
-                new RepoBuildCtlVpcRds(parent, this, r)
+                new RepoBuildCtlVpcRds(parent, this, r, props)
             })
         }
 

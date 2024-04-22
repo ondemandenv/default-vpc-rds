@@ -5,7 +5,7 @@ import {NodejsFunction} from "aws-cdk-lib/aws-lambda-nodejs";
 import {Policy, PolicyStatement} from "aws-cdk-lib/aws-iam";
 import {Runtime} from "aws-cdk-lib/aws-lambda";
 import * as path from "node:path";
-import {App, CfnOutput, Duration, Stack} from "aws-cdk-lib";
+import {App, CfnOutput, Duration, Stack, StackProps} from "aws-cdk-lib";
 import {RetentionDays} from "aws-cdk-lib/aws-logs";
 import {Provider} from "aws-cdk-lib/custom-resources";
 import {RepoBuildCtlVpcRdsSchusrs} from "./repo-build-ctl-vpc-rds-schusrs";
@@ -23,8 +23,8 @@ export class RepoBuildCtlVpcRds extends Stack {
     private readonly schUsrFun: NodejsFunction
     private readonly rdsCluster: ServerlessCluster;
 
-    constructor(parent: App, vpcStack: RepoBuildCtlVpc, rds: ContractsRdsCluster) {
-        super(parent, ContractsEnverCdk.SANITIZE_STACK_NAME(vpcStack.stackName + '-' + rds.clusterIdentifier));
+    constructor(parent: App, vpcStack: RepoBuildCtlVpc, rds: ContractsRdsCluster, props: StackProps) {
+        super(parent, ContractsEnverCdk.SANITIZE_STACK_NAME(vpcStack.stackName + '-' + rds.clusterIdentifier), props);
         this.vpcStack = vpcStack;
 
         const pid = `odmd-${rds.vpc.build.buildId}-${rds.vpc.vpcName}`
@@ -118,7 +118,7 @@ export class RepoBuildCtlVpcRds extends Stack {
         ])
 
         rds.schemaRoleUsers.forEach(su => {
-            new RepoBuildCtlVpcRdsSchusrs(parent, this.stackName, rds, su)
+            new RepoBuildCtlVpcRdsSchusrs(parent, this.stackName, rds, su, props )
         })
 
     }
