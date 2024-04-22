@@ -3,7 +3,6 @@ import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
 import {RepoBuildCtlVpc} from "../lib/repo-build-ctl-vpc";
 import {OndemandContracts} from "@ondemandenv/odmd-contracts";
-import {StackProps} from "aws-cdk-lib";
 
 async function main() {
     const app = new cdk.App();
@@ -18,7 +17,11 @@ async function main() {
         throw new Error("buildRegion>" + buildRegion + "; buildAccount>" + buildAccount)
     }
 
+    //OndemandContracts.inst.defaultVpcRds.envers.find( the enver I'm implementing)
+    //OndemandContracts.inst.defaultVpcRds.envers[0] for now
+
     new RepoBuildCtlVpc(app, OndemandContracts.inst.defaultVpcRds.envers[0])
+
 
 }
 
