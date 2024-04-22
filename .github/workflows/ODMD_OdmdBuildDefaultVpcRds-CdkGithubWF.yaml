@@ -31,7 +31,9 @@ jobs:
         
           if ${{ github.event.inputs.deploy }}; then
             cdk ls
-            cdk deploy  OdmdBuildDefaultVpcRds--main-springcdkecs OdmdBuildDefaultVpcRds--main-springcdkecs-springcdkecs-rds-sample OdmdBuildDefaultVpcRds--main-springcdkecs-springcdkecs-rds-sample-cdkecs  --require-approval never -vvv
+            cdk deploy  OdmdBuildDefaultVpcRds--main-springcdkecs --require-approval never -vvv
+            cdk deploy  OdmdBuildDefaultVpcRds--main-springcdkecs-springcdkecs-rds-sample --require-approval never -vvv
+            cdk deploy  OdmdBuildDefaultVpcRds--main-springcdkecs-springcdkecs-rds-sample-cdkecs  --require-approval never -vvv
           else
             cdk diff --all
           fi
