@@ -25,6 +25,7 @@ jobs:
           npm install -g cross-env
           
           npm install
+          npm --prefix lib/pg-schema-role-user-cs install
           
           ${{ vars[format('cdk_pre_{0}', github.ref_name)] }}
         
