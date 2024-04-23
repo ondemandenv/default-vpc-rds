@@ -1,3 +1,4 @@
+
 #ODMD GENERATED WORKFLOW, don't change unless you are sure
 
 name: OdmdBuildDefaultVpcRds-Custom,,CdkGithubWF
@@ -24,15 +25,11 @@ jobs:
           npm install -g cross-env
           
           npm install
-          npm --prefix lib/pg-schema-role-user-cs install
           
           ${{ vars[format('cdk_pre_{0}', github.ref_name)] }}
         
           if ${{ github.event.inputs.deploy }}; then
-            cdk ls
-            cdk deploy  OdmdBuildDefaultVpcRds--main-springcdkecs --require-approval never -vvv
-            cdk deploy  OdmdBuildDefaultVpcRds--main-springcdkecs-springcdkecs-rds-sample --require-approval never -vvv
-            cdk deploy  OdmdBuildDefaultVpcRds--main-springcdkecs-springcdkecs-rds-sample-cdkecs  --require-approval never -vvv
+            ${{ vars[format('cdk_deploy_{0}', github.ref_name)] }}
           else
             cdk diff --all
           fi
