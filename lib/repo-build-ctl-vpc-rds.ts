@@ -12,7 +12,7 @@ import {RepoBuildCtlVpcRdsSchusrs} from "./repo-build-ctl-vpc-rds-schusrs";
 import {
     AnyContractsEnVer,
     ContractsCrossRefProducer, ContractsEnverCdk,
-    ContractsRdsCluster,
+    ContractsRdsCluster, ContractsShareOut,
     GET_PG_USR_ROLE_PROVIDER_NAME
 } from "@ondemandenv/odmd-contracts";
 
@@ -110,15 +110,16 @@ export class RepoBuildCtlVpcRds extends Stack {
             value: provider.serviceToken
         })
 
-
-        const map = new Map<ContractsCrossRefProducer<AnyContractsEnVer>, string | number>([
-            [rds.clusterHostname, this.rdsCluster.clusterEndpoint.hostname],
-            [rds.clusterPort, this.rdsCluster.clusterEndpoint.port],
-            [rds.clusterSocketAddress, this.rdsCluster.clusterEndpoint.socketAddress],
-        ])
+        new ContractsShareOut(this, new Map<ContractsCrossRefProducer<AnyContractsEnVer>, string | number>(
+            new Map<ContractsCrossRefProducer<AnyContractsEnVer>, string | number>([
+                [rds.clusterHostname, this.rdsCluster.clusterEndpoint.hostname],
+                [rds.clusterPort, this.rdsCluster.clusterEndpoint.port],
+                [rds.clusterSocketAddress, this.rdsCluster.clusterEndpoint.socketAddress],
+            ])
+        ))
 
         rds.schemaRoleUsers.forEach(su => {
-            new RepoBuildCtlVpcRdsSchusrs(parent, this.stackName, rds, su, props )
+            new RepoBuildCtlVpcRdsSchusrs(parent, this.stackName, rds, su, props)
         })
 
     }
