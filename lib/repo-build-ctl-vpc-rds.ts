@@ -1,7 +1,7 @@
 import {Port, SecurityGroup, SelectedSubnets, SubnetType} from "aws-cdk-lib/aws-ec2";
 import {RepoBuildCtlVpc} from "./repo-build-ctl-vpc";
 import {
-    AuroraPostgresEngineVersion,
+    AuroraPostgresEngineVersion, CfnDBCluster,
     Credentials,
     DatabaseClusterEngine,
     ParameterGroup,
@@ -68,8 +68,10 @@ export class RepoBuildCtlVpcRds extends Stack {
                     log_statement: 'all',      // Enable slow query log
                 }
             })
-        })
-
+        });
+        const cfnCluster = this.rdsCluster.node.defaultChild as CfnDBCluster;
+        cfnCluster.enableCloudwatchLogsExports = ['postgresql'];
+        cfnCluster.performanceInsightsEnabled = true;
 
         const usrFuncSg = new SecurityGroup(this, 'usr-fun-sg', {
             vpc: vpcStack.vpc,
