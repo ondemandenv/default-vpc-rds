@@ -54,9 +54,6 @@ export class RepoBuildCtlVpcRds extends Stack {
         })
 
 
-        const exportPgUsrProviderName = GET_PG_USR_ROLE_PROVIDER_NAME(rds.vpc.build.buildId, process.env.CDK_DEFAULT_REGION!,
-            this.account, rds.vpc.vpcName)
-
         const usrFuncSg = new SecurityGroup(this, 'usr-fun-sg', {
             vpc: vpcStack.vpc,
             securityGroupName: pid + '-pg-schm-usr-fun-sg'
@@ -105,6 +102,8 @@ export class RepoBuildCtlVpcRds extends Stack {
         const provider = new Provider(this, `usr-fun-provider`, {onEventHandler: this.schUsrFun});
         provider.node.addDependency(this.rdsCluster, createUsrPolicy)
 
+        const exportPgUsrProviderName = GET_PG_USR_ROLE_PROVIDER_NAME(rds.vpc.build.buildId, process.env.CDK_DEFAULT_REGION!,
+            this.account, rds.vpc.vpcName)
         new CfnOutput(this, exportPgUsrProviderName, {
             exportName: exportPgUsrProviderName,
             value: provider.serviceToken
