@@ -61,17 +61,17 @@ export class RepoBuildCtlVpcRds extends Stack {
             parameterGroup: new ParameterGroup(this, 'paramGroup', {
                 engine,
                 parameters:{
-                    log_connections: '1',         // Enable general log
-                    log_disconnections: '1',      // Enable slow query log
-                    log_lock_waits: '1',      // Enable slow query log
-                    log_min_messages: 'debug1',      // Enable slow query log
-                    log_statement: 'all',      // Enable slow query log
+                    log_connections: '1',
+                    log_disconnections: '1',
+                    log_lock_waits: '1',
+                    log_min_messages: 'debug1',
+                    log_statement: 'all',
                 }
             })
         });
         const cfnCluster = this.rdsCluster.node.defaultChild as CfnDBCluster;
         cfnCluster.enableCloudwatchLogsExports = ['postgresql'];
-        cfnCluster.performanceInsightsEnabled = true;
+        // cfnCluster.performanceInsightsEnabled = true;
 
         const usrFuncSg = new SecurityGroup(this, 'usr-fun-sg', {
             vpc: vpcStack.vpc,
