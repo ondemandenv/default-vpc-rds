@@ -11,9 +11,9 @@ export async function handler(event: CloudFormationCustomResourceEvent, context:
     console.log(JSON.stringify(process.env))
     console.log('<<<<')
 
-    const userSecretId = event.ResourceProperties.userName as string
+    const userName = event.ResourceProperties.userName as string
 
-    const aa: User | SchemaRoleInit = (userSecretId && userSecretId.length > 0) ? new User() : new SchemaRoleInit()
+    const aa: User | SchemaRoleInit = (userName && userName.length > 0) ? new User() : new SchemaRoleInit()
 
     const rt = await aa.handler(event);
     await aa.pgClient.end()

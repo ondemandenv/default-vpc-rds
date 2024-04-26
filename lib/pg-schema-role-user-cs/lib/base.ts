@@ -14,6 +14,22 @@ export abstract class Base {
     protected schemaName: string
     protected adminUsername: string
 
+    protected get appRoleName(): string {
+        return this.schemaName + '_app'
+    }
+
+    protected get migRoleName(): string {
+        return this.schemaName + '_mig'
+    }
+
+    protected get readonlyRoleName(): string {
+        return this.schemaName + '_readonly'
+    }
+
+    protected get all3roles() {
+        return [this.appRoleName, this.migRoleName, this.readonlyRoleName];
+    }
+
     public async handler(event: CloudFormationCustomResourceEvent): Promise<void | CloudFormationCustomResourceResponse> {
         console.log('>>JSON.stringify(event)>>')
         console.log(JSON.stringify(event))
@@ -78,12 +94,6 @@ export abstract class Base {
         throw new Error('retry exhausted lookup for access denied: ')
     }
 
-
-    protected async createRoleGrantDBSchema(roleName: 'app' | 'readonly' | 'migrate') {
-        await this._pgClient.query(`create role ${roleName}`)
-        await this._pgClient.query(`grant connect, temp on database "${this.databaseName}" to ${roleName}`)
-        await this._pgClient.query(`grant usage on schema "${this.schemaName}" to ${roleName}`)
-    }
 
     protected async printUsrRoleStatus() {
         const rolePrvlg = await this._pgClient.query(`

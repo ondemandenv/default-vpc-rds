@@ -12,13 +12,15 @@ export class User extends Base {
     public async handler(event: CloudFormationCustomResourceEvent): Promise<CloudFormationCustomResourceResponse> {
         await super.handler(event)
         const {
-            roleName,
+            roleType,
             userName
         } = event.ResourceProperties
 
-        if (!['app', 'readonly', 'migrate'].includes(roleName)) {
-            throw `input role name has to be one of 'app', 'readonly', 'migrate', but found ${roleName}`
+        if (!['app', 'readonly', 'migrate'].includes(roleType)) {
+            throw `input role name has to be one of 'app', 'readonly', 'migrate', but found ${roleType}`
         }
+
+        const roleName = this.all3roles.find(r => r.endsWith(roleType))!
 
         if (this.adminUsername == userName) {
             throw new Error("can't operate on admin user")
@@ -59,10 +61,10 @@ export class User extends Base {
             } else if (event["RequestType"] == 'Update') {
                 try {
                     await this.pgClient.query(`BEGIN`)
-                    const oldRole = event.OldResourceProperties['roleName'];
+                    const oldRoleName = this.all3roles.find(r => r.endsWith(event.OldResourceProperties['roleType']))!
                     const oldUsr = event.OldResourceProperties['userName'];
-                    if (oldRole != roleName || oldUsr != userName) {
-                        await this.pgClient.query(`revoke ${oldRole} from "${oldUsr}"`)
+                    if (oldRoleName != roleName || oldUsr != userName) {
+                        await this.pgClient.query(`revoke ${oldRoleName} from "${oldUsr}"`)
                         await this.pgClient.query(`grant ${roleName} to "${userName}"`)
                     }
                     if (userSecretId != event.OldResourceProperties.userSecretId) {
@@ -93,30 +95,30 @@ export class User extends Base {
 
     protected async deleteUsrRole(userName: any) {
         console.log(`deleting user: ${userName}`)
-        await this.pgClient.query(`REASSIGN OWNED BY "${userName}" TO migrate`)
+        await this.pgClient.query(`REASSIGN OWNED BY "${userName}" TO ${this.migRoleName}`)
         await this.preDeletingUser(userName)
         await this.pgClient.query(`drop user "${userName}"`)
         console.log(`deleted user: ${userName}`)
     }
 
     protected async postCreatingUser(username: string) {
-        await this.pgClient.query(`ALTER DEFAULT PRIVILEGES for USER "${username}" IN SCHEMA "${this.schemaName}" GRANT insert, select, update, delete ON TABLES TO app`)
-        await this.pgClient.query(`ALTER DEFAULT PRIVILEGES for USER "${username}" IN SCHEMA "${this.schemaName}" GRANT USAGE ON SEQUENCES TO app`)
+        await this.pgClient.query(`ALTER DEFAULT PRIVILEGES for USER "${username}" IN SCHEMA "${this.schemaName}" GRANT insert, select, update, delete ON TABLES TO ${this.appRoleName}`)
+        await this.pgClient.query(`ALTER DEFAULT PRIVILEGES for USER "${username}" IN SCHEMA "${this.schemaName}" GRANT USAGE ON SEQUENCES TO  ${this.appRoleName}`)
 
-        await this.pgClient.query(`ALTER DEFAULT PRIVILEGES for USER "${username}" IN SCHEMA "${this.schemaName}" GRANT select ON TABLES TO readonly`)
+        await this.pgClient.query(`ALTER DEFAULT PRIVILEGES for USER "${username}" IN SCHEMA "${this.schemaName}" GRANT select ON TABLES TO ${this.readonlyRoleName}`)
 
-        await this.pgClient.query(`ALTER DEFAULT PRIVILEGES for USER "${username}" IN SCHEMA "${this.schemaName}" GRANT USAGE ON SEQUENCES TO migrate`)
-        await this.pgClient.query(`ALTER DEFAULT PRIVILEGES for USER "${username}" IN SCHEMA "${this.schemaName}" GRANT all privileges ON TABLES TO migrate`)
+        await this.pgClient.query(`ALTER DEFAULT PRIVILEGES for USER "${username}" IN SCHEMA "${this.schemaName}" GRANT USAGE ON SEQUENCES TO ${this.migRoleName}`)
+        await this.pgClient.query(`ALTER DEFAULT PRIVILEGES for USER "${username}" IN SCHEMA "${this.schemaName}" GRANT all privileges ON TABLES TO ${this.migRoleName}`)
     }
 
     protected async preDeletingUser(username: string) {
-        await this.pgClient.query(`ALTER DEFAULT PRIVILEGES for USER "${username}" IN SCHEMA "${this.schemaName}" REVOKE all ON TABLES from app`)
-        await this.pgClient.query(`ALTER DEFAULT PRIVILEGES for USER "${username}" IN SCHEMA "${this.schemaName}" REVOKE all ON SEQUENCES from app`)
+        await this.pgClient.query(`ALTER DEFAULT PRIVILEGES for USER "${username}" IN SCHEMA "${this.schemaName}" REVOKE all ON TABLES from  ${this.appRoleName}`)
+        await this.pgClient.query(`ALTER DEFAULT PRIVILEGES for USER "${username}" IN SCHEMA "${this.schemaName}" REVOKE all ON SEQUENCES from  ${this.appRoleName}`)
 
-        await this.pgClient.query(`ALTER DEFAULT PRIVILEGES for USER "${username}" IN SCHEMA "${this.schemaName}" REVOKE all ON TABLES from readonly`)
+        await this.pgClient.query(`ALTER DEFAULT PRIVILEGES for USER "${username}" IN SCHEMA "${this.schemaName}" REVOKE all ON TABLES from  ${this.readonlyRoleName}`)
 
-        await this.pgClient.query(`ALTER DEFAULT PRIVILEGES for USER "${username}" IN SCHEMA "${this.schemaName}" REVOKE all ON SEQUENCES from migrate`)
-        await this.pgClient.query(`ALTER DEFAULT PRIVILEGES for USER "${username}" IN SCHEMA "${this.schemaName}" REVOKE all ON TABLES from migrate`)
+        await this.pgClient.query(`ALTER DEFAULT PRIVILEGES for USER "${username}" IN SCHEMA "${this.schemaName}" REVOKE all ON SEQUENCES from ${this.migRoleName}`)
+        await this.pgClient.query(`ALTER DEFAULT PRIVILEGES for USER "${username}" IN SCHEMA "${this.schemaName}" REVOKE all ON TABLES from ${this.migRoleName}`)
 
     }
 

@@ -50,7 +50,7 @@ export class SchemaRoleInit extends Base {
 
     private async deleteAll() {
 
-        for (const roleName of ['app', 'readonly', 'migrate']) {
+        for (const roleName of this.all3roles) {
             try {
                 console.log(`deleting role:${roleName}`)
                 await this.pgClient.query(`REASSIGN OWNED BY ${roleName} TO "${this.adminUsername}"`)
@@ -75,8 +75,17 @@ export class SchemaRoleInit extends Base {
     }
 
 
+    protected async createRoleGrantDBSchema(roleName: string) {
+        if (!this.all3roles.includes(roleName)) {
+            throw new Error(`illegal role name: ${roleName}`)
+        }
+        await this.pgClient.query(`create role ${roleName}`)
+        await this.pgClient.query(`grant connect, temp on database "${this.databaseName}" to ${roleName}`)
+        await this.pgClient.query(`grant usage on schema "${this.schemaName}" to ${roleName}`)
+    }
+
     protected async createAppRole() {
-        const postgresRole = 'app'
+        const postgresRole = this.appRoleName
         await this.createRoleGrantDBSchema(postgresRole);
         await this.pgClient.query(`grant insert, select, update, delete on all tables in schema "${this.schemaName}" to ${postgresRole}`)
         await this.pgClient.query(`GRANT USAGE ON ALL SEQUENCES IN SCHEMA  "${this.schemaName}" to ${postgresRole}`)
@@ -87,15 +96,14 @@ export class SchemaRoleInit extends Base {
 
 
     protected async createReadonlyRole() {
-        const postgresRole = 'readonly'
+        const postgresRole = this.readonlyRoleName
         await this.createRoleGrantDBSchema(postgresRole);
         await this.pgClient.query(`grant select on all tables in schema "${this.schemaName}" to ${postgresRole}`)
         await this.pgClient.query(`ALTER DEFAULT PRIVILEGES IN SCHEMA "${this.schemaName}" GRANT select ON TABLES TO ${postgresRole}`)
     }
 
     protected async createMigrateRole() {
-        const postgresRole = 'migrate'
-
+        const postgresRole = this.migRoleName
         await this.createRoleGrantDBSchema(postgresRole);
         await this.pgClient.query(`grant all privileges on all tables in schema "${this.schemaName}" to ${postgresRole}`)
         await this.pgClient.query(`GRANT USAGE ON ALL SEQUENCES IN SCHEMA  "${this.schemaName}" to ${postgresRole}`)
@@ -118,7 +126,7 @@ DECLARE
 BEGIN
     FOR obj IN SELECT * FROM pg_event_trigger_ddl_commands() WHERE command_tag = 'CREATE TABLE' and schema_name="${this.schemaName}"
         LOOP
-            EXECUTE format('ALTER TABLE %s OWNER TO migrate', obj.object_identity);
+            EXECUTE format('ALTER TABLE %s OWNER TO ${this.migRoleName}', obj.object_identity);
         END LOOP;
 END;
 $$
@@ -148,9 +156,9 @@ DO $$
             SELECT tablename
             FROM pg_tables
             WHERE schemaname = '${this.schemaName}'
-              AND tableowner <> 'migrate'
+              AND tableowner <> '${this.migRoleName}'
             LOOP
-                EXECUTE format('ALTER TABLE %I.%I OWNER TO migrate', ${this.schemaName}, text);
+                EXECUTE format('ALTER TABLE %I.%I OWNER TO ${this.migRoleName}', ${this.schemaName}, text);
             END LOOP;
     END $$;
 `)

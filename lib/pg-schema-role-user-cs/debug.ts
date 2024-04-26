@@ -79,7 +79,7 @@ async function main() {
         "ResourceType": "Custom::OdmdPgUser",
         "ResourceProperties": {
             "ServiceToken": "arn:aws:lambda:us-west-1:420887418376:function:gyang-ctl-BUILD-spring-rd-usrfunproviderframeworko-4U1UBpZHQo6u",
-            "roleName": "readonly",
+            "roleType": "readonly",
             "userSecretId": "spring-rds-cdkOndemandenvspringrdscdkw2readonlyuser",
             "schemaName": "test_spring",
             "userName": "readonly_user"
