@@ -1,6 +1,12 @@
 import {Port, SecurityGroup, SelectedSubnets, SubnetType} from "aws-cdk-lib/aws-ec2";
 import {RepoBuildCtlVpc} from "./repo-build-ctl-vpc";
-import {AuroraPostgresEngineVersion, Credentials, DatabaseClusterEngine, ServerlessCluster} from "aws-cdk-lib/aws-rds";
+import {
+    AuroraPostgresEngineVersion,
+    Credentials,
+    DatabaseClusterEngine,
+    ParameterGroup,
+    ServerlessCluster
+} from "aws-cdk-lib/aws-rds";
 import {NodejsFunction} from "aws-cdk-lib/aws-lambda-nodejs";
 import {Policy, PolicyStatement} from "aws-cdk-lib/aws-iam";
 import {Runtime} from "aws-cdk-lib/aws-lambda";
@@ -42,15 +48,23 @@ export class RepoBuildCtlVpcRds extends Stack {
             securityGroupName: rds.defaultSgName,
             vpc: vpcStack.vpc,
         });
+        const engine = DatabaseClusterEngine.auroraPostgres({version: AuroraPostgresEngineVersion.VER_13_12});
         this.rdsCluster = new ServerlessCluster(this, rds.clusterIdentifier, {
             clusterIdentifier: rds.clusterIdentifier,
-            engine: DatabaseClusterEngine.auroraPostgres({version: AuroraPostgresEngineVersion.VER_13_12}),
+            engine,
             vpc: vpcStack.vpc,
             scaling: rds.scaling,
             defaultDatabaseName: rds.defaultDatabaseName,
             securityGroups: [rdsClusterSg],
             vpcSubnets: rdsSubnets,
             credentials: Credentials.fromGeneratedSecret(rds.rootUsername, {secretName: rds.rootSecretName}),
+            parameterGroup: new ParameterGroup(this, 'paramGroup', {
+                engine,
+                parameters:{
+                    general_log: '1',         // Enable general log
+                    slow_query_log: '1',      // Enable slow query log
+                }
+            })
         })
 
 
