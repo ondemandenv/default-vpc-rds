@@ -31,8 +31,6 @@ export abstract class Base {
     }
 
     public async handler(event: CloudFormationCustomResourceEvent): Promise<void | CloudFormationCustomResourceResponse> {
-        console.log('>>JSON.stringify(event)>>')
-        console.log(JSON.stringify(event))
         console.log(`>>>base.handle>>>>`)
 
         const {

@@ -24,7 +24,7 @@
   "dependencies": {
     "aws-cdk-lib": "2.133.0",
     "constructs": "^10.0.0",
-    "@ondemandenv/odmd-contracts": "0.1.78",
+    "@ondemandenv/odmd-contracts": "0.1.79",
     "source-map-support": "^0.5.21"
   }
 }

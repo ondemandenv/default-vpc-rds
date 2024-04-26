@@ -3,32 +3,33 @@ import {CreateSecretCommand, SecretsManagerClient} from "@aws-sdk/client-secrets
 
 const evEnv = {
     "AWS_LAMBDA_FUNCTION_VERSION": "$LATEST",
-    "adminSecretId": "fd0c165ef4609a757d8480a419a8bffe",
+    "adminSecretId": "ondemandenvOdmdBuildDefaultVpcRdsspringcdkecssamplesecret",
     "NODE_OPTIONS": "--unhandled-rejections=strict",
-    "AWS_SESSION_TOKEN": "IQoJb3JpZ2luX2VjEKP//////////wEaCXVzLXdlc3QtMSJHMEUCIE1c92zwCnM+zqkGa0OCt2s/cnGyqA22FzQtw5JO5TabAiEA7JYgwxzkC6myAekxsIpZltTAyzoFDVudnTUqVeDB/C4q0wMIPBAAGgw0MjA4ODc0MTgzNzYiDN4JczWTBEPUHSCNRiqwAzboaLPO/ru7iFG+z79RTVMa4t0495ap7fp697wnYiTn4i4Q2pKx9CWDshn89NL53UrrYe0gAD/oSGMqXcxI7GWLduJC1FTWkWpDjDmefxD6bxC6xdpgl7PRtsHhp1V9Z75lHe+pnOtF5jRm0zG9M440jPCWyHzP6r64T2Hb6zXPKoL0omcwRQdroFLEXftMPa+iBrrjVODAGynwUSvcvuqHSekKrmttx5TPEhfv2/cBwc14iqhFTODJiWLeEiU54U5feAqniFu1Qo+i+bASlsCfA1z74qDYA7ABYYijNnPulhZgpCPdUqYww8lkmpi/zz0lA2UK3hXbpynw+DoaqpjcUJrmvqaBhkZyain7w0aDLhwTFhX/S9070xRJY2qCorHacT1+pYs1N4519xSNNnDMQotS2Dv65Dh8bxVeupQ7SbUMQmng71MmC+KzFy224kG0+h3u23gG8EGkfpPMiPhYuwDtOGo76Ahw+rDyE5XSJshxJcSlUDpCqDI+vCXSv1PNIZ35+DhlnsmBKgz0q3VrdPRYDsVGtCzcFhXpTgUPOxqp/b0j+rywEVogCU8tyTDz/c2sBjqeAQvvp7ZM4ekOqRu3B24ZQiuBUQ1s/XsCXptEUW+kqeWJbrLKut0zbfJX/ZE4qCkviHgxLbLC9+v4cPwtQcqvF5k41LBS8WgYeKV5x5v864NiGdETyLrucR6Sy7yqKuXSQnOga24TJbV45R8Q4zqktOjXGoZ7S96vTXuNI8sB6BqLnsOpf5ZnYUDEapv04o1Tlp6yD0dcgqSB6GMetyn3",
-    "postgresHostname": "f381a4ae0260986cab729777b15d0012.cluster-cdeukiqki8dt.us-west-1.rds.amazonaws.com",
-    "AWS_LAMBDA_LOG_GROUP_NAME": "/aws/lambda/gyang-ctl-BUILD-spring-rds-cdk-4208-usrfun5F2E3D05-Ucxht4goUB4J",
+    "AWS_SESSION_TOKEN": "IQoJb3JpZ2luX2VjEHwaCXVzLXdlc3QtMSJIMEYCIQDOEM4SNmy1PZAvMc1yGirSEYhPgHbqSNK9eqKigCagXQIhAIt8E8YvRHjB3WomQjQ5PJgb6gnNfXCiqyTyYjObtBS0KtwDCMX//////////wEQABoMNDIwODg3NDE4Mzc2IgxoqPveRdKelGoG+6UqsAP8atZjrhuIHy9/7K6fPvwAwuJyBTpJFxgDplqAlIXytjAyuLve1lNfEtMztNrVEVj2M0mIpgviQ172DxgJScULyAXNk9kaVBMYucJ7GmqU6COGY+21WSG4LzeNN3TMn3K0D2pOxKwVAksHr20pSyW1BGMxFCztWF4TuA+8LUrkqHs+YWKVPcCVqWRNiPic/2DxxTft9PHMV2Wrxlfgw1zIDUWVxlmc6qx+lj06LcHM+Nby3ee2sJmKwzR1eBKs6CYidLvaVgYKzrTIhFkGsQtafG0vY1Of2JIL1AmEGi9aCwt7mIGQXm1HM1h5q6nZjKppkDRzufyNwPdmjhMMMcWFDIBnHeoT5xmKPS38k3Fidl12egb64V8KfrWSgnh8/nNW9qNv8xctNHNwu0NV8Lm82550AbJ8ZqeOIbq90SqLRCilJVFivoGyGQ/EZF84iCD/81EUAbTERMK/WfIkgtSXvPc+IWHrFKr1jxS7z2pT4584Ufieo8VSh6uC1LoC97xn1nUi2LPsd0jE/SxFcTjECklbPRTFV+6A08lncxIjDvThiQctAwVnPupsbEOoK+owk4ewsQY6nQGRsUUJyGgDeV9q2qKWjsehvQW3bXdemkjdKdEF1o4pKu0uXCG1MqJt3fn4GXr7zDjMOvvNVXE7cDheyCi/iaAfk1MkAOWABjw3KaNOB0mkh+eUCms97G7apr1JSqxIvNDvaYXenQwJ4Ftu0aqH89QMxmSxKczUDJ+wOksz77arB5OlI1v3lQiGZKiNXFCpefZD8E+ABLD7VVtm7HaQ",
+    "postgresHostname": "springcdkecs-rds-sample.cluster-cdeukiqki8dt.us-west-1.rds.amazonaws.com",
     "LAMBDA_TASK_ROOT": "/var/task",
+    "AWS_LAMBDA_LOG_GROUP_NAME": "/aws/lambda/OdmdBuildDefaultVpcRds-main-sprin-pgusrfun11BF7D8D-jVz03i3sj60y",
     "LD_LIBRARY_PATH": "/var/lang/lib:/lib64:/usr/lib64:/var/runtime:/var/runtime/lib:/var/task:/var/task/lib:/opt/lib",
+    "AWS_LAMBDA_LOG_STREAM_NAME": "2024/04/26/[$LATEST]7842afa586534c489b4616bbcb7a64b8",
     "AWS_LAMBDA_RUNTIME_API": "127.0.0.1:9001",
-    "AWS_LAMBDA_LOG_STREAM_NAME": "2024/01/02/[$LATEST]7cb7df9088114862b11441d2f7f2f89e",
     "AWS_EXECUTION_ENV": "AWS_Lambda_nodejs18.x",
     "databaseName": "defaultDatabaseName",
-    "AWS_LAMBDA_FUNCTION_NAME": "gyang-ctl-BUILD-spring-rds-cdk-4208-usrfun5F2E3D05-Ucxht4goUB4J",
+    "AWS_LAMBDA_FUNCTION_NAME": "OdmdBuildDefaultVpcRds-main-sprin-pgusrfun11BF7D8D-jVz03i3sj60y",
     "AWS_XRAY_DAEMON_ADDRESS": "169.254.79.129:2000",
     "PATH": "/var/lang/bin:/usr/local/bin:/usr/bin/:/bin:/opt/bin",
     "AWS_DEFAULT_REGION": "us-west-1",
     "PWD": "/var/task",
-    "AWS_SECRET_ACCESS_KEY": "l/ABH9W5sCTbq9eM4gMYAkGV1TWMESzQZ6sbg1tA",
-    "LAMBDA_RUNTIME_DIR": "/var/runtime",
+    "AWS_SECRET_ACCESS_KEY": "m1KUyQawasqt+42+sSX3b3syS1lTJhwAFQ+wGcE9",
     "LANG": "en_US.UTF-8",
+    "LAMBDA_RUNTIME_DIR": "/var/runtime",
     "AWS_LAMBDA_INITIALIZATION_TYPE": "on-demand",
     "NODE_PATH": "/opt/nodejs/node18/node_modules:/opt/nodejs/node_modules:/var/runtime/node_modules:/var/runtime:/var/task",
     "postgresHostport": "5432",
-    "AWS_REGION": "us-west-1",
     "TZ": ":UTC",
+    "AWS_REGION": "us-west-1",
+    "secretPath": "odmd-/OdmdBuildDefaultVpcRds/springcdkecs-rds-sample",
     "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
-    "AWS_ACCESS_KEY_ID": "ASIAWD7WYKYEFY5NIWFK",
+    "AWS_ACCESS_KEY_ID": "ASIAWD7WYKYECDYOFY4U",
     "SHLVL": "0",
     "_AWS_XRAY_DAEMON_ADDRESS": "169.254.79.129",
     "_AWS_XRAY_DAEMON_PORT": "2000",
@@ -36,7 +37,7 @@ const evEnv = {
     "_HANDLER": "index.handler",
     "AWS_LAMBDA_FUNCTION_MEMORY_SIZE": "256",
     "NODE_EXTRA_CA_CERTS": "/var/runtime/ca-cert.pem",
-    "_X_AMZN_TRACE_ID": "Root=1-65937ef1-36e47ec861b7809b59536238;Parent=27bb0f970d7fdd19;Sampled=0;Lineage=5673c35d:0|4339c38d:0"
+    "_X_AMZN_TRACE_ID": "Root=1-662c0391-484a5e8a71f59bc87b80be1b;Parent=29c3a68503918dfd;Sampled=0;Lineage=00c8d4df:0|30c3462a:0"
 } as { [k: string]: string }
 
 for (const k in evEnv) {
@@ -69,22 +70,36 @@ async function loadENVs() {
 async function main() {
     await loadENVs();
 
-    const event = {
-        "RequestType": "Delete",
-        "ServiceToken": "arn:aws:lambda:us-west-1:420887418376:function:gyang-ctl-BUILD-spring-rd-usrfunproviderframeworko-4U1UBpZHQo6u",
-        "ResponseURL": "https://cloudformation-custom-resource-response-uswest1.s3-us-west-1.amazonaws.com/arn%3Aaws%3Acloudformation%3Aus-west-1%3A420887418376%3Astack/gyang-ctl-BUILD-spring-rds-cdk-420887418376-VPC-spring-rds-cdkOndemandenvspringrdscdkw2vpcName-RDS-f381a4ae0260986cab729777b/ca3b7750-a91b-11ee-8fde-06e3e8ab711d%7Cw2testspringrdsusrtestspringreadonlyuser54CF9160%7C0d6e952c-b00b-42d7-bf30-1739ef4c5d04?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240102T031151Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Credential=AKIA3MSIBDUEIAXP7Y6W%2F20240102%2Fus-west-1%2Fs3%2Faws4_request&X-Amz-Signature=b8746f036020f415fa1258786005845173054fe1abe654d5b505a2e9da9342d5",
-        "StackId": "arn:aws:cloudformation:us-west-1:420887418376:stack/gyang-ctl-BUILD-spring-rds-cdk-420887418376-VPC-spring-rds-cdkOndemandenvspringrdscdkw2vpcName-RDS-f381a4ae0260986cab729777b/ca3b7750-a91b-11ee-8fde-06e3e8ab711d",
-        "RequestId": "0d6e952c-b00b-42d7-bf30-1739ef4c5d04",
-        "LogicalResourceId": "w2testspringrdsusrtestspringreadonlyuser54CF9160",
+    const schemaInitEvent = {
+        "RequestType": "Create",
+        "ServiceToken": "arn:aws:lambda:us-west-1:420887418376:function:OdmdBuildDefaultVpcRds-ma-usrfunproviderframeworko-Ynn8OVsKDO4h",
+        "ResponseURL": "https://cloudformation-custom-resource-response-uswest1.s3-us-west-1.amazonaws.com/arn%3Aaws%3Acloudformation%3Aus-west-1%3A420887418376%3Astack/OdmdBuildDefaultVpcRds--main-springcdkecs-springcdkecs-rds-sample-cdkecs/0caaea50-0405-11ef-be65-02aa6bff63b1%7CschemacdkecsrdsusrcdkecsA09FBAFD%7C327662e4-a38d-4893-a043-730f7d51b71e?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240426T194209Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Credential=AKIA3MSIBDUEKBINJKOD%2F20240426%2Fus-west-1%2Fs3%2Faws4_request&X-Amz-Signature=87c94431f33b43e828fc711c909931816701443660a666b498447e387dbc3087",
+        "StackId": "arn:aws:cloudformation:us-west-1:420887418376:stack/OdmdBuildDefaultVpcRds--main-springcdkecs-springcdkecs-rds-sample-cdkecs/0caaea50-0405-11ef-be65-02aa6bff63b1",
+        "RequestId": "327662e4-a38d-4893-a043-730f7d51b71e",
+        "LogicalResourceId": "schemacdkecsrdsusrcdkecsA09FBAFD",
+        "ResourceType": "Custom::OdmdPgSchRole",
+        "ResourceProperties": {
+            "ServiceToken": "arn:aws:lambda:us-west-1:420887418376:function:OdmdBuildDefaultVpcRds-ma-usrfunproviderframeworko-Ynn8OVsKDO4h",
+            "rds": "springcdkecs-rds-sample",
+            "schemaName": "cdkecs"
+        }
+    } as CloudFormationCustomResourceEvent
+
+    const createUser = {
+        "RequestType": "Create",
+        "ServiceToken": "arn:aws:lambda:us-west-1:420887418376:function:OdmdBuildDefaultVpcRds-ma-usrfunproviderframeworko-Ynn8OVsKDO4h",
+        "ResponseURL": "https://cloudformation-custom-resource-response-uswest1.s3-us-west-1.amazonaws.com/arn%3Aaws%3Acloudformation%3Aus-west-1%3A420887418376%3Astack/OdmdBuildDefaultVpcRds--main-springcdkecs-springcdkecs-rds-sample-cdkecs/0caaea50-0405-11ef-be65-02aa6bff63b1%7CschemacdkecsrdsusrcdkecscdkecsreadonlyCBBA1422%7Cb0475ea5-bc98-4f72-a36c-fbb4abc8b5fd?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240426T194214Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Credential=AKIA3MSIBDUEKBINJKOD%2F20240426%2Fus-west-1%2Fs3%2Faws4_request&X-Amz-Signature=1058b60a13cf5072cdbd4ed877572c13c4daca3f21f243952ad037ca028edaaa",
+        "StackId": "arn:aws:cloudformation:us-west-1:420887418376:stack/OdmdBuildDefaultVpcRds--main-springcdkecs-springcdkecs-rds-sample-cdkecs/0caaea50-0405-11ef-be65-02aa6bff63b1",
+        "RequestId": "b0475ea5-bc98-4f72-a36c-fbb4abc8b5fd",
+        "LogicalResourceId": "schemacdkecsrdsusrcdkecscdkecsreadonlyCBBA1422",
         "ResourceType": "Custom::OdmdPgUser",
         "ResourceProperties": {
-            "ServiceToken": "arn:aws:lambda:us-west-1:420887418376:function:gyang-ctl-BUILD-spring-rd-usrfunproviderframeworko-4U1UBpZHQo6u",
-            "roleType": "readonly",
-            "userSecretId": "spring-rds-cdkOndemandenvspringrdscdkw2readonlyuser",
-            "schemaName": "test_spring",
-            "userName": "readonly_user"
-        },
-        PhysicalResourceId: 'N/A'
+            "ServiceToken": "arn:aws:lambda:us-west-1:420887418376:function:OdmdBuildDefaultVpcRds-ma-usrfunproviderframeworko-Ynn8OVsKDO4h",
+            "rds": "springcdkecs-rds-sample",
+            "roleName": "readonly",
+            "schemaName": "cdkecs",
+            "userName": "cdkecs_readonly"
+        }
     } as CloudFormationCustomResourceEvent
 
     const context = {
@@ -106,7 +121,7 @@ async function main() {
         "invokedFunctionArn": "arn:aws:lambda:us-west-2:835934552565:function:odmd-contracts-ghwf_as_pp_490548955090",
         "awsRequestId": "335d7c99-34e6-4bb2-ad81-134aecf5591c"
     };
-    await (await import( './index' )).handler(event, context)
+    await (await import( './index' )).handler(schemaInitEvent, context)
 }
 
 
