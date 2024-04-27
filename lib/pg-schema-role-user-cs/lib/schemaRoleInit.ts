@@ -10,16 +10,17 @@ export class SchemaRoleInit extends Base {
         await super.handler(event)
 
         if (event.RequestType == 'Create') {
+            await this.pgClient.query(`create schema IF NOT EXISTS "${this.schemaName}"`)
             try {
-                await this.pgClient.query(`create schema IF NOT EXISTS "${this.schemaName}"`)
-
                 await this.pgClient.query(`BEGIN`)
+                await this.createChangeTableOwnerTriggerAndFunc()//todo: move to database scope, because 1) role is global; 2) trigger is owned by db 3) function can be owned by schema ... and no more: format('%s_mig', obj.schema_name
 
                 await this.createAppRole()
                 await this.createMigrateRole()
                 await this.createReadonlyRole()
+
                 await this.changeExistingTableOwner()
-                await this.createTrigger()
+
                 await this.pgClient.query(`COMMIT`)
             } catch (e) {
                 await this.pgClient.query(`ROLLBACK`)
@@ -116,43 +117,41 @@ export class SchemaRoleInit extends Base {
     }
 
 
-    protected async createTrigger() {
+    protected async createChangeTableOwnerTriggerAndFunc() {
+        // const tmp = await this.pgClient.query(`select current_user;`);
+        // const tmp1 = await this.pgClient.query(`select session_user;`);
+        // const tmp2 = await this.pgClient.query(`select current_database();`);
+        // const tmp3 = await this.pgClient.query(`SELECT * FROM pg_event_trigger;`);
+        // const tmp4 = await this.pgClient.query(`SELECT * FROM pg_proc  where proname='change_owner_function';`);
+
         await this.pgClient.query(`
-CREATE OR REPLACE FUNCTION change_owner_function()
-    RETURNS event_trigger AS
+
+DROP EVENT TRIGGER IF EXISTS change_table_owner_on_created;
+DROP FUNCTION IF EXISTS change_owner_function();
+
+CREATE FUNCTION change_owner_function()
+RETURNS event_trigger AS
 $$
 DECLARE
     obj RECORD;
-    new_role_name TEXT;
 BEGIN
     FOR obj IN SELECT * FROM pg_event_trigger_ddl_commands() WHERE command_tag = 'CREATE TABLE'
-        LOOP
+    LOOP
+        IF obj.schema_name IN ('pg_catalog', 'information_schema') OR obj.schema_name LIKE 'pg_%' THEN
+            CONTINUE;
+        END IF;
         
-            IF obj.schema_name IN ('pg_catalog', 'information_schema') OR obj.schema_name LIKE 'pg_%' THEN
-                CONTINUE;
-            END IF;
-            
-            new_role_name := format('%s_mig', obj.schema_name);
-            EXECUTE format('ALTER TABLE %I.%I OWNER TO %I', obj.schema_name, obj.object_name, new_role_name);
-        END LOOP;
+        EXECUTE format('ALTER TABLE %I.%I OWNER TO %I', obj.schema_name, obj.object_name, format('%s_mig', obj.schema_name));
+    END LOOP;
 END;
 $$
-    LANGUAGE plpgsql;
-`);
-        const result = await this.pgClient.query(`
-            SELECT 1 FROM pg_event_trigger WHERE evtname = 'change_table_owner_on_created'
-        `);
+LANGUAGE plpgsql;
 
-        if (result.rows.length === 0) {
-            await this.pgClient.query(`
-                CREATE EVENT TRIGGER change_table_owner_on_created ON ddl_command_end 
-                WHEN TAG IN ('CREATE TABLE')
-                EXECUTE FUNCTION change_owner_function();
-            `);
-            console.log("Event trigger was created successfully.");
-        } else {
-            console.log("Event trigger already exists.");
-        }
+CREATE EVENT TRIGGER change_table_owner_on_created ON ddl_command_end 
+WHEN TAG IN ('CREATE TABLE')
+EXECUTE FUNCTION change_owner_function();
+
+`);
     }
 
     protected async changeExistingTableOwner() {
