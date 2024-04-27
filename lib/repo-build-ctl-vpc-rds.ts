@@ -70,7 +70,7 @@ export class RepoBuildCtlVpcRds extends Stack {
             })
         });
         const cfnCluster = this.rdsCluster.node.defaultChild as CfnDBCluster;
-        // cfnCluster.enableCloudwatchLogsExports = ['postgresql'];
+        cfnCluster.enableCloudwatchLogsExports = ['postgresql'];
         // cfnCluster.performanceInsightsEnabled = true;
 
         const usrFuncSg = new SecurityGroup(this, 'usr-fun-sg', {
