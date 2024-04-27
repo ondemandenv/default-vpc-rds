@@ -123,27 +123,36 @@ CREATE OR REPLACE FUNCTION change_owner_function()
 $$
 DECLARE
     obj RECORD;
+    new_role_name TEXT;
 BEGIN
-    FOR obj IN SELECT * FROM pg_event_trigger_ddl_commands() WHERE command_tag = 'CREATE TABLE' and schema_name="${this.schemaName}"
+    FOR obj IN SELECT * FROM pg_event_trigger_ddl_commands() WHERE command_tag = 'CREATE TABLE'
         LOOP
-            EXECUTE format('ALTER TABLE %s OWNER TO ${this.migRoleName}', obj.object_identity);
+        
+            IF obj.schema_name IN ('pg_catalog', 'information_schema') OR obj.schema_name LIKE 'pg_%' THEN
+                CONTINUE;
+            END IF;
+            
+            new_role_name := format('%s_mig', obj.schema_name);
+            EXECUTE format('ALTER TABLE %I.%I OWNER TO %I', obj.schema_name, obj.object_name, new_role_name);
         END LOOP;
 END;
 $$
     LANGUAGE plpgsql;
-`)
+`);
+        const result = await this.pgClient.query(`
+            SELECT 1 FROM pg_event_trigger WHERE evtname = 'change_table_owner_on_created'
+        `);
 
-        await this.pgClient.query(`
-DO
-$$
-    BEGIN
-        IF NOT EXISTS (SELECT 1 FROM pg_event_trigger WHERE evtname = 'change_table_owner_on_created') THEN
-            CREATE EVENT TRIGGER change_table_owner_on_created ON ddl_command_end WHEN TAG in ('CREATE TABLE')
-            EXECUTE FUNCTION change_owner_function();
-        end if;
-    END;
-$$;
-`)
+        if (result.rows.length === 0) {
+            await this.pgClient.query(`
+                CREATE EVENT TRIGGER change_table_owner_on_created ON ddl_command_end 
+                WHEN TAG IN ('CREATE TABLE')
+                EXECUTE FUNCTION change_owner_function();
+            `);
+            console.log("Event trigger was created successfully.");
+        } else {
+            console.log("Event trigger already exists.");
+        }
     }
 
     protected async changeExistingTableOwner() {
@@ -158,7 +167,7 @@ DO $$
             WHERE schemaname = '${this.schemaName}'
               AND tableowner <> '${this.migRoleName}'
             LOOP
-                EXECUTE format('ALTER TABLE %I.%I OWNER TO ${this.migRoleName}', ${this.schemaName}, text);
+                EXECUTE format('ALTER TABLE %I.%I OWNER TO ${this.migRoleName}', '${this.schemaName}', text);
             END LOOP;
     END $$;
 `)
