@@ -62,25 +62,18 @@ export class User extends Base {
                 const sm = new SecretsManagerClient({})
                 await sm.send(new DeleteSecretCommand({SecretId: userSecretId}))
             } else if (event["RequestType"] == 'Update') {
-                try {
-                    await this.pgClient.query(`BEGIN`)
-                    const oldRoleName = this.all3roles.find(r => r.endsWith(event.OldResourceProperties['roleType']))!
-                    const oldUsr = event.OldResourceProperties['userName'];
-                    if (oldRoleName != roleName || oldUsr != userName) {
-                        await this.pgClient.query(`revoke ${oldRoleName} from "${oldUsr}"`)
-                        await this.pgClient.query(`grant ${roleName} to "${userName}"`)
+                const oldRoleName = this.all3roles.find(r => r.endsWith(event.OldResourceProperties['roleType']))!
+                const oldUsr = event.OldResourceProperties['userName'];
+                if (oldRoleName != roleName || oldUsr != userName) {
+                    await this.pgClient.query(`revoke ${oldRoleName} from "${oldUsr}"`)
+                    await this.pgClient.query(`grant ${roleName} to "${userName}"`)
+                }
+                if (userSecretId != event.OldResourceProperties.userSecretId) {
+                    const cred = await this.userPass(userSecretId)
+                    if (userName != cred.username) {
+                        throw new Error("userName from secret is not same as input!")
                     }
-                    if (userSecretId != event.OldResourceProperties.userSecretId) {
-                        const cred = await this.userPass(userSecretId)
-                        if (userName != cred.username) {
-                            throw new Error("userName from secret is not same as input!")
-                        }
-                        await this.pgClient.query(`ALTER USER "${userName}" WITH PASSWORD "${cred.password}"`)
-                    }
-                    await this.pgClient.query(`COMMIT`)
-                } catch (e) {
-                    await this.pgClient.query(`ROLLBACK`)
-                    throw e
+                    await this.pgClient.query(`ALTER USER "${userName}" WITH PASSWORD "${cred.password}"`)
                 }
             } else {
                 throw new Error('N/A')

@@ -11,21 +11,14 @@ export class SchemaRoleInit extends Base {
 
         if (event.RequestType == 'Create') {
             await this.pgClient.query(`create schema IF NOT EXISTS "${this.schemaName}"`)
-            try {
-                await this.pgClient.query(`BEGIN`)
-                await this.createChangeTableOwnerTriggerAndFunc()//todo: move to database scope, because 1) role is global; 2) trigger is owned by db 3) function can be owned by schema ... and no more: format('%s_mig', obj.schema_name
+            await this.createChangeTableOwnerTriggerAndFunc()//todo: move to database scope, because 1) role is global; 2) trigger is owned by db 3) function can be owned by schema ... and no more: format('%s_mig', obj.schema_name
 
-                await this.createAppRole()
-                await this.createMigrateRole()
-                await this.createReadonlyRole()
+            await this.createAppRole()
+            await this.createMigrateRole()
+            await this.createReadonlyRole()
 
-                await this.changeExistingTableOwner()
+            await this.changeExistingTableOwner()
 
-                await this.pgClient.query(`COMMIT`)
-            } catch (e) {
-                await this.pgClient.query(`ROLLBACK`)
-                throw e
-            }
         } else if (event.RequestType == 'Delete') {
             await this.deleteAll();
         } else {

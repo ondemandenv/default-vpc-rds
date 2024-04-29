@@ -15,7 +15,15 @@ export async function handler(event: CloudFormationCustomResourceEvent, context:
 
     const aa: User | SchemaRoleInit = (userName && userName.length > 0) ? new User() : new SchemaRoleInit()
 
-    const rt = await aa.handler(event);
-    await aa.pgClient.end()
-    return rt
+    await aa.pgClient.query(`BEGIN`)
+    try {
+        const rt = await aa.handler(event);
+        await aa.pgClient.query(`COMMIT`)
+        return rt
+    } catch (e) {
+        await aa.pgClient.query(`ROLLBACK`)
+        throw e
+    } finally {
+        await aa.pgClient.end()
+    }
 }
