@@ -63,11 +63,15 @@ export abstract class Base {
         console.log('pgClientConfig:' + JSON.stringify(cp))
         this._pgClient = new Client(pgClientConfig)
         await this._pgClient.connect()
-        this._pgClient.on("drain", console.log)
-        this._pgClient.on("error", console.error)
-        this._pgClient.on("notice", console.log)
-        this._pgClient.on("notification", console.warn)
-        this._pgClient.on("end", console.log)
+        this._pgClient.on("drain", () => {
+            console.log('pgclient draining')
+        })
+        this._pgClient.on("error", this.pgClientLogging)
+        this._pgClient.on("notice", this.pgClientLogging)
+        this._pgClient.on("notification", this.pgClientLogging)
+        this._pgClient.on("end", () => {
+            console.log('pgclient end')
+        })
         console.log(`<<<base.handle<<<<`)
     }
 
@@ -90,6 +94,12 @@ export abstract class Base {
             }
         }
         throw new Error('retry exhausted lookup for access denied: ')
+    }
+
+    protected pgClientLogging(l: any) {
+        console.warn(`pgClientLogging>>>>
+        ${l}
+pgClientLogging<<<<`)
     }
 
 

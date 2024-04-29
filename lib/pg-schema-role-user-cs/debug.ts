@@ -5,13 +5,13 @@ const evEnv = {
     "AWS_LAMBDA_FUNCTION_VERSION": "$LATEST",
     "adminSecretId": "ondemandenvOdmdBuildDefaultVpcRdsspringcdkecssamplesecret",
     "NODE_OPTIONS": "--unhandled-rejections=strict",
-    "AWS_SESSION_TOKEN": "IQoJb3JpZ2luX2VjEIL//////////wEaCXVzLXdlc3QtMSJGMEQCIGH/VbtSohF3vpSqXwDeanb/iZarkqjt1JDCdaZh+ZHSAiA/ikGR7PsTL6n+n/W8HwGF8rYwtoY87bpsxqaHGDnSVSrcAwjL//////////8BEAAaDDQyMDg4NzQxODM3NiIMK6Pq9dc0cj7ZEpf8KrADeY7qdRH66CLbvgQxI2dpqaVm5r91hhVSFJOb+MLsscmiE7IpJm4uxzQPuIQsKK+7QNvcy/N1hgkXuuYYeJZslKmx6WCndLIbJxIDKesaKFM9wfgmE5npyC0S8WdG4Qm3RqmZGqHFn8dUNDPnFiEl8WAiXvBvfKk+tsHxEMHtcENZv+s7y4zXVW0KdeK2DaDxZDjvPHxorRjaXXqpEuyBxeg1lyEr+TF4lRGHnYbJQv5pZ+J1rVaMHmg+Eyqw0B5Hn4AqwUB2lmSwWQ5kmbeFoSTScRfIf4o0LcBy7rHEeqIxiStg7Zog+vcITkm7JU7D7P1wpxJfM8j5rOVm8uS6kF03gMrCzgm7ZMtCQw1s7i8h8S9u/+kWoB3QQ9LF1YV/59poWOx4ioguLyEKAMsSVX+/0VrxkgNhu2hPTPGs2monn5ZHXHAc4VEsGqo2xNCa3oJDepFcG5X5o43r/gqBxM02TekbbgdrcEpQjeHiEKhxQK75S8ZsSoOmhWdLW4/5eDTGqiUAg+x+ckFvS2YY0qc8nh3qthn48sYVyVZKCEx/0JS7ftedi6u/VIMzMkEwMKq8sbEGOp8B4LP59gnYy5ZkiAjBNt40ma0gA1XS0Ie62ZmxmpfR620lU0WK5sb+LmuT8iZuu/LnwoNFb9VmoU2M2IMIf8glF8PMdodKZzPtpnyEwUxpD7wQhVj+O6JV5KlRSqfgm+lj3RFGXP4tw/+kqK41+PB531k6NmfRiiz/dOWsbVPG+sWUVfXRqirg6sD9bPs5kPOf+55SufUaprtQ+ZzSmig/",
+    "AWS_SESSION_TOKEN": "IQoJb3JpZ2luX2VjEL7//////////wEaCXVzLXdlc3QtMSJHMEUCIHSBKWiEmQfdRYrcHnJc5N1GKKE8jNo3RjUg1xQjZ/LrAiEAvDEXbb/khnw9J/oseXwD5r4xa8Y5DZE4wikavslbKxAq0wMIFxAAGgw0MjA4ODc0MTgzNzYiDKqcg+SvLC72bDZG6SqwA8NjbkuhnAtkV5gN0sTbppbt2WplKElxTby0m6MG9ZZesJ8nOUzAslZDrxkB9u+wPYjvvAr6bgxrI+OFmgt/62Nnr/Ca6/MMDlF4x0B4DNoaP3f56m9W9yPBO+wpHXOZ44PaBP71zpyE77kq+O7m2kd6IXBn+Iv58SjD6eISCo+d5FKaJM1LkoUI4c+yi80ukH+VYvEppEEjB9sY+qJmzgdc2djQg8j6kz6yYUf1RsQnrX3VZi+lWeAVhK8Cf7EcfMgEy9fmFUPUKU3zD6D6lTun8U98gcyHc/qPyLr4IytgKoA1hO6+w4Wh/XRR6xUruzQigweuHN21SBq0DL9h1mbExd78pX9JLHfg/20fWNkdsITZN7/fAry6T0Y9XRUUKGdGuoi/yAyjUkEbDBU7b60omT3B9kWHnY7bNbjAvQDgfjWETyJtxoZp5Ap4iQhqkRWF2Wco52AzpoctnP5XL8q4SL/G0kAyxZ95vAK+FMlRWt/rVts0ZJQOc+hUoWMHuUhV+7fHCEfz8dvpe+H/jdMcv2XQgL4fIJEpTyRXtHS8ucO2fXKm4qFrtTIHI7Tc6jCHw76xBjqeAY2cX0UFpXUamucaBBEjwr62oWhhG0fxNBGkAwZWXBAfy85qrB8T6eM2ag2O9pCZs5j4pFs0n9eQvwWXi/ATuwQ99ZbgonRS5928P0quM3gXRSsCqHVHeqvCeP9/wsQQ9AURcEbwHUUHfWqpu9erpGD1x5rQYcR9NYuFeuoUReKLfMP/sJiCDXlYvcQdmMTLmmg3PPlLb/zX0BrAoaxn",
     "postgresHostname": "springcdkecs-rds-sample.cluster-cdeukiqki8dt.us-west-1.rds.amazonaws.com",
-    "LAMBDA_TASK_ROOT": "/var/task",
     "AWS_LAMBDA_LOG_GROUP_NAME": "/aws/lambda/OdmdBuildDefaultVpcRds-main-sprin-pgusrfun11BF7D8D-5GygVQ4EM9X0",
+    "LAMBDA_TASK_ROOT": "/var/task",
     "LD_LIBRARY_PATH": "/var/lang/lib:/lib64:/usr/lib64:/var/runtime:/var/runtime/lib:/var/task:/var/task/lib:/opt/lib",
     "AWS_LAMBDA_RUNTIME_API": "127.0.0.1:9001",
-    "AWS_LAMBDA_LOG_STREAM_NAME": "2024/04/27/[$LATEST]9856b5152de64d899aa9a977c6e0fb9a",
+    "AWS_LAMBDA_LOG_STREAM_NAME": "2024/04/29/[$LATEST]e4591178df8e4a0b9d1130cc9a8fc11f",
     "AWS_EXECUTION_ENV": "AWS_Lambda_nodejs18.x",
     "databaseName": "defaultDatabaseName",
     "AWS_LAMBDA_FUNCTION_NAME": "OdmdBuildDefaultVpcRds-main-sprin-pgusrfun11BF7D8D-5GygVQ4EM9X0",
@@ -19,17 +19,17 @@ const evEnv = {
     "PATH": "/var/lang/bin:/usr/local/bin:/usr/bin/:/bin:/opt/bin",
     "AWS_DEFAULT_REGION": "us-west-1",
     "PWD": "/var/task",
-    "AWS_SECRET_ACCESS_KEY": "2JvVKADsY6pUSEfSXD8Xln5A0muV1i4cMEc/eD3l",
-    "LANG": "en_US.UTF-8",
+    "AWS_SECRET_ACCESS_KEY": "5+5XRoFVQrFZ950OXLn+XzU8TZXqf0bC9bzJL5Li",
     "LAMBDA_RUNTIME_DIR": "/var/runtime",
+    "LANG": "en_US.UTF-8",
     "AWS_LAMBDA_INITIALIZATION_TYPE": "on-demand",
     "NODE_PATH": "/opt/nodejs/node18/node_modules:/opt/nodejs/node_modules:/var/runtime/node_modules:/var/runtime:/var/task",
-    "TZ": ":UTC",
-    "AWS_REGION": "us-west-1",
     "postgresHostport": "5432",
-    "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+    "AWS_REGION": "us-west-1",
+    "TZ": ":UTC",
     "secretPath": "odmd-/OdmdBuildDefaultVpcRds/springcdkecs-rds-sample",
-    "AWS_ACCESS_KEY_ID": "ASIAWD7WYKYEBRR2XQG3",
+    "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+    "AWS_ACCESS_KEY_ID": "ASIAWD7WYKYEGE7U6E7Y",
     "SHLVL": "0",
     "_AWS_XRAY_DAEMON_ADDRESS": "169.254.79.129",
     "_AWS_XRAY_DAEMON_PORT": "2000",
@@ -37,8 +37,8 @@ const evEnv = {
     "_HANDLER": "index.handler",
     "AWS_LAMBDA_FUNCTION_MEMORY_SIZE": "256",
     "NODE_EXTRA_CA_CERTS": "/var/runtime/ca-cert.pem",
-    "_X_AMZN_TRACE_ID": "Root=1-662c5e29-7d1b8ff21b08b5d21d9175e9;Parent=4c24b2e67ffffde9;Sampled=0;Lineage=7214a10b:0|9d64d3b4:0"
-}as { [k: string]: string }
+    "_X_AMZN_TRACE_ID": "Root=1-662fa185-62637c731156ca5f7bc11810;Parent=54a5898828520799;Sampled=0;Lineage=7214a10b:0|9d64d3b4:0"
+} as { [k: string]: string }
 
 for (const k in evEnv) {
     process.env[k] = evEnv[k]!
@@ -60,9 +60,10 @@ async function loadENVs() {
     process.env.AWS_REGION = region
     process.env.AWS_DEFAULT_REGION = region
 
-    process.env.AWS_ACCESS_KEY_ID = "ASIAWD7WYKYEIA2446V6"
-    process.env.AWS_SECRET_ACCESS_KEY = "YXPuptn+OXJuKOST1HzkR6nZnH2cxPz/w+u56CMZ"
-    process.env.AWS_SESSION_TOKEN = "IQoJb3JpZ2luX2VjEIP//////////wEaCXVzLXdlc3QtMiJIMEYCIQC2Ug6jfer/Cfsw96XtNpi1M/oWrWf67oewBhUIjt3e7AIhAIbDH1fd9uKsCieCQIbwG8hcQMyp7iOU14Z8tJQ7cQJqKpgDCMz//////////wEQABoMNDIwODg3NDE4Mzc2Igxwbkq07PJ+93xItr4q7AJjx+fLz+fm2bOCeac9CsWogaVMFLsKQrv/olrPysBgDg/W0XtgoXipZPkPc14oQ9AS5uUbEN1MIB1q7tKGEZWeSbdMpxC442UpH0azTiN5XcRV23juQl2MA3l7doPbo32S5c7vru3cdWultRtPkhg4Y0gvUUUuPBkGYaTzvFN8zUB/CZ5nEoKChmh/yRVlsFFto9001lPOhsnWE6dDKZ/UfqabUOqrtGtt4apQGaqyG0hOzBfICMtJrFxnxiN9rjQlBmvA+i/wLT1YTxd5+T8MLxNpXWb9dDDxvJX2FBYqvFjQrT1Wfe6AW0yK9O4IbHjYiJPVbEwRzwz0wRLjKzHRg0mtSj0Wrr+6RDlxPi18/qbiouY9uN2h6/7QmvMwqS5Igz+6whyNcgfODG6ZrolPj4c/VqjZzczS2Z98mXSni/ixwOsqJyeZ7/fX09wXhHTvgNMptMuY0urZT51nK6+FTBsuSCxQc1p2F5HgMITZsbEGOqUB1mTiqQNSoEhxm8UyB4wvVI/PmVt5AB8E4BaZhbpAs1lnkrxcIGmm7Ht14Wz9u5/3Ju3F17UTA/tWt09jC/BPk5PyclPECC2PP0Pv8z7wh+S6YT+k4EM/pGzQU5dYi6S6GOhpES0k5NMEki7cz2ZurlInITkPajrxoWD1QfBUPK20QwAGLPGBdhdsM7RwOakTW7dSQSJIUG0dvms1N07bGSDpQ8Z0"
+
+    process.env.AWS_ACCESS_KEY_ID = "ASIAWD7WYKYECCNMGDYJ"
+    process.env.AWS_SECRET_ACCESS_KEY = "SdZExAQPp2zrrsfeHDVFWEpaKGxEGF2igNqZE1Ne"
+    process.env.AWS_SESSION_TOKEN = "IQoJb3JpZ2luX2VjEL///////////wEaCXVzLXdlc3QtMiJHMEUCIQCT+gIKRHfMEIdT3QtGzo9YrIlriBWtdLWjC7Sa/H8zcwIgan51xkYwZlrtILEjd25GkBPZ5wy9nnpqVxCzdMBYm/0qjwMIGBAAGgw0MjA4ODc0MTgzNzYiDIIwO/roQvKBS34mjyrsAoqBcXX/hsrUJTkHQBcO5x1Oa7LIj4fplA9SNolnwkKlyXyR9x0bKq44bku0fCbBigRPCWsQUAPMuTbM+HCM9KeuQCgoX633LKE4/oSOkR4+GpWMc2TjbC9Ph8VB959bMGSEmg2bPyq1z1qEpqt/pwu9cVyNciNyblFZqr80gw7P04J1vxycVHc17CNa2pZ3LfRpAbd71skjW71h4oHIyi6EfnAOGx8m+kfPz/zi+e1B7wJqi6EFJ8a7iRb7bZmEL1KmqV/5O0etGL8okRvX0LYCY7ruN56slHJ4H7fU1tny7TfIto3V5Vg9s0ERAFENwMoInUuJAbMIShSqMniTiiB6fxIcBN/GSDV2iW3U0A7zoXUwr6lDFGpm6UeYuOU2c0l8q4HtJyOvwBwxjr/ngMWf/uuzKCz7+GigH8VqsCId9tf6QSc626QlRlUGmkULoY7yW9KMCU81g8reS2nMcqBTtDkwoWccsKz9qP0w4Oa+sQY6pgFmWedxwIAmJaKIQst4q7ny8AaMZ0zc86UnidxIliZ3ETx83yVb5oBjdiuMFyUx+X9PftjYa+bGzwFFoiaafJuJBlOUZNncXPqIzy3zlUoTyXrO1qFY9mi67Ze8vt82HokA2bYX9avoyRgK+ca6fmfCW9ccdAvJbkllWV7s0GvKQ0NJvl1nrWEXeUEV1K63FquSdOLMtOTOkXQCKSEYlIifnpvVpOyU"
 }
 
 async function main() {
@@ -70,17 +71,19 @@ async function main() {
 
     const schemaInitEvent = {
         "RequestType": "Create",
+        "ServiceToken": "arn:aws:lambda:us-west-1:420887418376:function:OdmdBuildDefaultVpcRds-ma-usrfunproviderframeworko-XE9dB8E2h15I",
+        "ResponseURL": "https://cloudformation-custom-resource-response-uswest1.s3-us-west-1.amazonaws.com/arn%3Aaws%3Acloudformation%3Aus-west-1%3A420887418376%3Astack/spring-rds-cdk--odmdSbxUsw1/80004380-032c-11ef-b1bc-06bf9934a2df%7Cschemacdkecsrdsusrcdkecsappusrodmdsbxusw13F4017FB%7C9dcde942-c169-4ff1-a1df-771110ea4ff3?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240429T133253Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7199&X-Amz-Credential=AKIA3MSIBDUEKBINJKOD%2F20240429%2Fus-west-1%2Fs3%2Faws4_request&X-Amz-Signature=1f3f4aeba32c2412edca4060930268c1e25b4b927c9f111061ac0f31339e8e8f",
+        "StackId": "arn:aws:cloudformation:us-west-1:420887418376:stack/spring-rds-cdk--odmdSbxUsw1/80004380-032c-11ef-b1bc-06bf9934a2df",
+        "RequestId": "9dcde942-c169-4ff1-a1df-771110ea4ff3",
+        "LogicalResourceId": "schemacdkecsrdsusrcdkecsappusrodmdsbxusw13F4017FB",
+        "ResourceType": "Custom::OdmdPgUser",
+        "ResourceProperties": {
             "ServiceToken": "arn:aws:lambda:us-west-1:420887418376:function:OdmdBuildDefaultVpcRds-ma-usrfunproviderframeworko-XE9dB8E2h15I",
-            "ResponseURL": "https://cloudformation-custom-resource-response-uswest1.s3-us-west-1.amazonaws.com/arn%3Aaws%3Acloudformation%3Aus-west-1%3A420887418376%3Astack/OdmdBuildDefaultVpcRds--main-springcdkecs-springcdkecs-rds-sample-cdkecs/f7c383c0-0438-11ef-b7e9-0284331dc49d%7CschemacdkecsrdsusrcdkecsA09FBAFD%7C50930cc2-a3e6-440e-8650-88adee9ea250?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240427T020841Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Credential=AKIA3MSIBDUEKBINJKOD%2F20240427%2Fus-west-1%2Fs3%2Faws4_request&X-Amz-Signature=0ef00efd0144d3e7c88cb0de59913788def12f18f3ecd5dac6a65236c33c64fd",
-            "StackId": "arn:aws:cloudformation:us-west-1:420887418376:stack/OdmdBuildDefaultVpcRds--main-springcdkecs-springcdkecs-rds-sample-cdkecs/f7c383c0-0438-11ef-b7e9-0284331dc49d",
-            "RequestId": "50930cc2-a3e6-440e-8650-88adee9ea250",
-            "LogicalResourceId": "schemacdkecsrdsusrcdkecsA09FBAFD",
-            "ResourceType": "Custom::OdmdPgSchRole",
-            "ResourceProperties": {
-            "ServiceToken": "arn:aws:lambda:us-west-1:420887418376:function:OdmdBuildDefaultVpcRds-ma-usrfunproviderframeworko-XE9dB8E2h15I",
-                "schemaName": "cdkecs"
+            "schemaName": "cdkecs",
+            "roleType": "app",
+            "userName": "appusrodmdsbxusw1"
         }
-    }as CloudFormationCustomResourceEvent
+    } as CloudFormationCustomResourceEvent
 
     const createUser = {
         "RequestType": "Create",
