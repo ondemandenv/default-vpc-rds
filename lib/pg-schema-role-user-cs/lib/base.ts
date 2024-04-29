@@ -30,8 +30,8 @@ export abstract class Base {
         return [this.appRoleName, this.migRoleName, this.readonlyRoleName];
     }
 
-    public async handler(event: CloudFormationCustomResourceEvent): Promise<void | CloudFormationCustomResourceResponse> {
-        console.log(`>>>base.handle>>>>`)
+    public async initPgClient(event: CloudFormationCustomResourceEvent): Promise<void | CloudFormationCustomResourceResponse> {
+        console.log(`>>>base.initPgClient>>>>`)
 
         const {
             schemaName,
@@ -72,7 +72,7 @@ export abstract class Base {
         this._pgClient.on("end", () => {
             console.log('pgclient end')
         })
-        console.log(`<<<base.handle<<<<`)
+        console.log(`<<<base.initPgClient<<<<`)
     }
 
     protected async userPass(secretId: string): Promise<{ username: string; password: string }> {
@@ -101,7 +101,7 @@ export abstract class Base {
         ${l}
 pgClientLogging<<<<`)
     }
-
+    public abstract handler(event: CloudFormationCustomResourceEvent): Promise<CloudFormationCustomResourceResponse>
 
     protected async printUsrRoleStatus() {
         const rolePrvlg = await this._pgClient.query(`

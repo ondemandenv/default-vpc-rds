@@ -7,7 +7,6 @@ import {CloudFormationCustomResourceResponse} from "aws-lambda/trigger/cloudform
 export class SchemaRoleInit extends Base {
 
     public async handler(event: CloudFormationCustomResourceEvent): Promise<CloudFormationCustomResourceResponse> {
-        await super.handler(event)
 
         if (event.RequestType == 'Create') {
             await this.pgClient.query(`create schema IF NOT EXISTS "${this.schemaName}"`)

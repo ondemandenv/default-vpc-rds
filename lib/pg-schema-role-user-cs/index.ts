@@ -15,6 +15,7 @@ export async function handler(event: CloudFormationCustomResourceEvent, context:
 
     const aa: User | SchemaRoleInit = (userName && userName.length > 0) ? new User() : new SchemaRoleInit()
 
+    await aa.initPgClient(event);
     await aa.pgClient.query(`BEGIN`)
     try {
         const rt = await aa.handler(event);

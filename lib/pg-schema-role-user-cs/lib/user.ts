@@ -10,7 +10,6 @@ import {
 export class User extends Base {
 
     public async handler(event: CloudFormationCustomResourceEvent): Promise<CloudFormationCustomResourceResponse> {
-        await super.handler(event)
         const {
             roleType,
             userName
