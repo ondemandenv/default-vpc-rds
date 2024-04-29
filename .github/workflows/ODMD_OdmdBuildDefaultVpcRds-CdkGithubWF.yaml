@@ -46,4 +46,3 @@ jobs:
           NODE_OPTIONS: --unhandled-rejections=strict
 
 #arn:aws:cloudformation:us-west-1:420887418376:stack/odmd-ctl-BUILD-OdmdBuildDefaultVpcRds-420887418376-PP/3017a390-00de-11ef-ad76-0248e59b5287,RepoBuildCdkWithGithubWorkflowgithubWFlmain70D40883
-
