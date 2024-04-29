@@ -21,6 +21,9 @@ export class User extends Base {
         }
 
         const roleName = this.all3roles.find(r => r.endsWith(roleType))!
+        if (!roleName) {
+            throw new Error(`role type: ${roleType} can't find it's name !`)
+        }
 
         if (this.adminUsername == userName) {
             throw new Error("can't operate on admin user")

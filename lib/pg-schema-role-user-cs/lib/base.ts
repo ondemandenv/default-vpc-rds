@@ -19,7 +19,7 @@ export abstract class Base {
     }
 
     protected get migRoleName(): string {
-        return this.schemaName + '_mig'
+        return this.schemaName + '_migrate'
     }
 
     protected get readonlyRoleName(): string {
