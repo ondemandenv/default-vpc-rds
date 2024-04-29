@@ -42,8 +42,7 @@ export class RepoBuildCtlVpc extends Stack {
             nwShares.push(tgwRef.producer)
         }
 
-        const shareIn = new ContractsShareIn(this, m.owner.buildId,
-            nwShares)
+        const shareIn = new ContractsShareIn(this, m.owner.buildId, nwShares)
 
         const vpcProps = {
             vpcName: m.vpcConfig.vpcName,
