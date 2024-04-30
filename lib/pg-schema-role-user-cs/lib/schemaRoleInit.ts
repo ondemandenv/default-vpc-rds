@@ -10,7 +10,7 @@ export class SchemaRoleInit extends Base {
 
         if (event.RequestType == 'Create') {
             await this.pgClient.query(`create schema IF NOT EXISTS "${this.schemaName}"`)
-            await this.createChangeTableOwnerTriggerAndFunc()//todo: move to database scope, because 1) role is global; 2) trigger is owned by db 3) function can be owned by schema ... and no more: format('%s_mig', obj.schema_name
+            await this.createChangeTableOwnerTriggerAndFunc()//todo: move to database scope, because 1) role is global; 2) trigger is owned by db 3) function can be owned by schema ... and no more: format('%s_migrate', obj.schema_name
 
             await this.createAppRole()
             await this.createMigrateRole()
@@ -133,7 +133,7 @@ BEGIN
             CONTINUE;
         END IF;
         
-        EXECUTE format('ALTER TABLE %I.%I OWNER TO %I', obj.schema_name, obj.object_name, format('%s_mig', obj.schema_name));
+        EXECUTE format('ALTER TABLE %s OWNER TO %s', obj.object_identity, format('%s_migrate', obj.schema_name));
     END LOOP;
 END;
 $$
