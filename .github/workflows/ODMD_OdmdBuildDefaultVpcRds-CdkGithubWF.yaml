@@ -1,3 +1,4 @@
+
 #ODMD GENERATED WORKFLOW, don't change unless you are sure
 
 name: OdmdBuildDefaultVpcRds-Custom,,CdkGithubWF
@@ -45,6 +46,4 @@ jobs:
           SRC_BRANCH: ${{github.ref_name}}
           NODE_OPTIONS: --unhandled-rejections=strict
 
-#arn:aws:cloudformation:us-west-1:420887418376:stack/odmd-ctl-BUILD-OdmdBuildDefaultVpcRds-420887418376-PP/3017a390-00de-11ef-ad76-0248e59b5287,RepoBuildCdkWithGithubWorkflowgithubWFlmain70D40883
-
-
+#arn:aws:cloudformation:us-west-1:420887418376:stack/odmd-ctl-BUILD-OdmdBuildDefaultVpcRds-420887418376-PP/3017a390-00de-11ef-ad76-0248e59b5287,githubWFlbuswest1420887418376springcdkecs
