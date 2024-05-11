@@ -20,6 +20,8 @@ jobs:
           node-version: 18
       - name: CDK deploy or diff
         run: |
+
+          aws sts get-caller-identity
           
           npm install -g aws-cdk@${{ vars[format('cdk_ver_{0}', github.ref_name)] }}
           npm install -g cross-env
