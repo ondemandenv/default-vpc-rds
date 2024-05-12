@@ -20,24 +20,17 @@ jobs:
           node-version: 18
       - name: CDK deploy or diff
         run: |
-
-          env
-          aws sts get-caller-identity
           
           npm install -g aws-cdk@${{ vars[format('cdk_ver_{0}', github.ref_name)] }}
           npm install -g cross-env
           
           npm install
-
-          echo '?????>>>'
-          echo ${{ vars[format('cdk_pre_{0}', github.ref_name)] }}
-          echo '?????<<<'
+          
+          ${{ vars[format('cdk_pre_{0}', github.ref_name)] }}
         
-          if [ "${{ github.event.inputs.deploy }}" = "true" ]; then
-            echo 'Deploying...'
-            # Add your deployment commands here
+          if ${{ github.event.inputs.deploy }}; then
+            ${{ vars[format('cdk_deploy_{0}', github.ref_name)] }}
           else
-            echo 'Showing diff...'
             cdk diff --all
           fi
           
@@ -53,4 +46,4 @@ jobs:
           SRC_BRANCH: ${{github.ref_name}}
           NODE_OPTIONS: --unhandled-rejections=strict
 
-
+#arn:aws:cloudformation:us-west-1:420887418376:stack/odmd-ctl-BUILD-OdmdBuildDefaultVpcRds-420887418376-PP/4bb10c80-107f-11ef-86c8-024b4763ffa3,githubWFlbuswest1420887418376springcdkecs
