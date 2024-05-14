@@ -5,47 +5,27 @@ name: OdmdBuildDefaultVpcRds-Custom,,CdkGithubWF
 on:
   workflow_dispatch:
     inputs:
-      deploy:
-        description: 'Set to true to deploy, otherwise shows diff'
-        required: false
-        type: boolean
-        default: false
+      target_rev_ref:
+        description: 'Tag or revision/SHA to checkout'
+      aws_credentials:
+        type: string
+        description: | 
+          Your AWS credentials in the format:
+          [0123456789_MyRole_profile]
+          aws_access_key_id=01234_id
+          aws_secret_access_key=56689_secret
+          aws_session_token=token0123456789
 jobs:
-  cdk-deploy:
+  odmd_job:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
         with:
-          node-version: 18
-      - name: CDK deploy or diff
-        run: |
-          
-          npm install -g aws-cdk@${{ vars[format('cdk_ver_{0}', github.ref_name)] }}
-          npm install -g cross-env
-          
-          npm install
-          
-          ${{ vars[format('cdk_pre_{0}', github.ref_name)] }}
-        
-          if ${{ github.event.inputs.deploy }}; then
-            ${{ vars[format('cdk_deploy_{0}', github.ref_name)] }}
-          else
-            cdk diff --all
-          fi
-          
+          ref: ${{ github.event.inputs.ref || github.ref }}
+      - uses: ondemandenv/build@main
+        with:
+          aws_credentials: ${{github.event.inputs.aws_credentials}}
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets[format('AWS_ACCESS_KEY_ID_{0}', github.ref_name)] }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets[format('AWS_SECRET_ACCESS_KEY_{0}', github.ref_name)] }}
-          AWS_SESSION_TOKEN: ${{ secrets[format('AWS_SESSION_TOKEN_{0}', github.ref_name)] }}
+          ODMD_AWS_CREDENTIALS: ${{ secrets['ODMD_AWS_CREDENTIALS'] }}
 
-          AWS_DEFAULT_REGION: ${{ vars[format('AWS_DEFAULT_REGION_{0}', github.ref_name)] }}
-          ODMD_SRC_ROLE: ${{ vars[format('src_role_{0}', github.ref_name)] }}
-          ODMD_ACCOUNTS: ${{ vars[format('ODMD_ACCOUNTS_{0}', github.ref_name)] }}
-          
-          SRC_BRANCH: ${{github.ref_name}}
-          NODE_OPTIONS: --unhandled-rejections=strict
-
-#arn:aws:cloudformation:us-west-1:420887418376:stack/odmd-ctl-BUILD-OdmdBuildDefaultVpcRds-420887418376-PP/3017a390-00de-11ef-ad76-0248e59b5287,githubWFlbuswest1420887418376springcdkecs
-
-#1
+#
