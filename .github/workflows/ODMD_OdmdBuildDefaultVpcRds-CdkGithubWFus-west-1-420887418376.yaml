@@ -1,7 +1,6 @@
-
 #ODMD GENERATED WORKFLOW, don't change unless you are sure
 
-name: OdmdBuildDefaultVpcRds-Custom,,CdkGithubWF
+name: ODMD_OdmdBuildDefaultVpcRds-CdkGithubWFus-west-1-420887418376
 on:
   workflow_dispatch:
     inputs:
@@ -26,6 +25,6 @@ jobs:
         with:
           aws_credentials: ${{github.event.inputs.aws_credentials}}
         env:
-          ODMD_AWS_CREDENTIALS: ${{ secrets['ODMD_AWS_CREDENTIALS'] }}
+          ODMD_AWS_CREDENTIALS: ${{ secrets['ODMD_AWS_CREDENTIALS_OdmdBuildDefaultVpcRds_420887418376'] }}
 
 #
