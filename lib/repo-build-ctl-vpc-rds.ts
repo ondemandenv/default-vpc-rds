@@ -1,7 +1,7 @@
 import {Port, SecurityGroup, SelectedSubnets, SubnetType} from "aws-cdk-lib/aws-ec2";
 import {RepoBuildCtlVpc} from "./repo-build-ctl-vpc";
 import {
-    AuroraPostgresEngineVersion,
+    AuroraPostgresEngineVersion, CfnDBCluster,
     Credentials,
     DatabaseClusterEngine,
     ParameterGroup,
@@ -13,7 +13,7 @@ import {Runtime} from "aws-cdk-lib/aws-lambda";
 import * as path from "node:path";
 import {App, CfnOutput, Duration, Stack, StackProps} from "aws-cdk-lib";
 import {RetentionDays} from "aws-cdk-lib/aws-logs";
-import {AwsCustomResource, AwsCustomResourcePolicy, PhysicalResourceId, Provider} from "aws-cdk-lib/custom-resources";
+import {Provider} from "aws-cdk-lib/custom-resources";
 import {RepoBuildCtlVpcRdsSchusrs} from "./repo-build-ctl-vpc-rds-schusrs";
 import {
     AnyContractsEnVer,
@@ -60,7 +60,7 @@ export class RepoBuildCtlVpcRds extends Stack {
             credentials: Credentials.fromGeneratedSecret(rds.rootUsername, {secretName: rds.rootSecretName}),
             parameterGroup: new ParameterGroup(this, 'paramGroup', {
                 engine,
-                parameters: {
+                parameters:{
                     log_connections: '1',
                     log_disconnections: '1',
                     log_lock_waits: '1',
@@ -69,23 +69,11 @@ export class RepoBuildCtlVpcRds extends Stack {
                 }
             })
         });
+        const cfnCluster = this.rdsCluster.node.defaultChild as CfnDBCluster;
 
-        new AwsCustomResource(this, 'EnableCloudwatchLogsExport', {
-            onCreate: {
-                service: 'RDS',
-                action: 'modifyDBCluster',
-                parameters: {
-                    DBClusterIdentifier: this.rdsCluster.clusterIdentifier,
-                    CloudwatchLogsExportConfiguration: {
-                        EnableLogTypes: ['postgresql'],
-                    },
-                },
-                physicalResourceId: PhysicalResourceId.of(`${this.rdsCluster.clusterIdentifier}-EnableCloudwatchLogsExport`),
-            },
-            policy: AwsCustomResourcePolicy.fromSdkCalls({
-                resources: AwsCustomResourcePolicy.ANY_RESOURCE,
-            }),
-        });
+        //Aurora Serverless currently doesn't support CloudWatch Log Export.
+        cfnCluster.enableCloudwatchLogsExports = ['postgresql'];
+        // cfnCluster.performanceInsightsEnabled = true;
 
         const usrFuncSg = new SecurityGroup(this, 'usr-fun-sg', {
             vpc: vpcStack.vpc,

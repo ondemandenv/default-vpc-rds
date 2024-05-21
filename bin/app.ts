@@ -25,16 +25,10 @@ async function main() {
         }
     } as StackProps;
 
-    /*
+    //OndemandContracts.inst.defaultVpcRds.envers.find( the enver I'm implementing)
+    //OndemandContracts.inst.defaultVpcRds.envers[0] for now
 
-    todo:
-    OndemandContracts.inst.defaultVpcRds.envers.find( the enver I'm implementing)
-    OndemandContracts.inst.defaultVpcRds.envers[0] for now
-
-    */
-
-    const currentEnver = OndemandContracts.inst.defaultVpcRds.envers[0];
-    new RepoBuildCtlVpc(app, currentEnver, props)
+    new RepoBuildCtlVpc(app, OndemandContracts.inst.defaultVpcRds.envers[0], props)
 
 
 }
