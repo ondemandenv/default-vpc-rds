@@ -8,8 +8,8 @@
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
-    "cdk-ls": "tsc --build --clean && tsc --build && cross-env target_rev_ref=b:?? cdk ls --profile 590184031795_AdministratorAccess",
-    "cdk-sa": "tsc --build --clean && tsc --build && cross-env target_rev_ref=b:?? cdk synth --all --profile 590184031795_AdministratorAccess"
+    "cdk-ls": "tsc --build --clean && tsc --build && cross-env target_rev_ref=b:?? cdk ls --profile AdministratorAccess-590184130740",
+    "cdk-sa": "tsc --build --clean && tsc --build && cross-env target_rev_ref=b:?? cdk synth --all --profile AdministratorAccess-590184130740"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",
