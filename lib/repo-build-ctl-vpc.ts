@@ -29,8 +29,7 @@ export class RepoBuildCtlVpc extends Stack {
     public readonly privateSubnets: SelectedSubnets;
 
     constructor(parent: App, m: ContractsEnverCdkDefaultVpc, props: StackProps) {
-        const revStr = m.targetRevision.type == 'b' ? m.targetRevision.value : m.targetRevision.toString();
-        super(parent, ContractsEnverCdk.SANITIZE_STACK_NAME(`${m.owner.buildId}--${revStr}`), props);
+        super(parent, ContractsEnverCdk.SANITIZE_STACK_NAME(`${m.owner.buildId}--${m.targetRevision}-${m.vpcConfig.vpcName}`), props);
 
         if (m.owner.buildId == OndemandContracts.inst.networking.buildId) {
             throw new Error(`No vpc should be shared in ${OndemandContracts.inst.networking.buildId}`)
