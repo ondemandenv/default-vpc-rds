@@ -25,10 +25,15 @@ async function main() {
         }
     } as StackProps;
 
-    //OndemandContracts.inst.defaultVpcRds.envers.find( the enver I'm implementing)
-    //OndemandContracts.inst.defaultVpcRds.envers[0] for now
+    const allMyEnvers = OndemandContracts.inst.defaultVpcRds.envers;
 
-    new RepoBuildCtlVpc(app, OndemandContracts.inst.defaultVpcRds.envers[0], props)
+    const m = allMyEnvers.find(e => e.targetRevision.toString() == OndemandContracts.REV_REF_value)!;
+
+    if (!m) {
+        throw new Error('no enver found!')
+    }
+
+    new RepoBuildCtlVpc(app, m, props)
 
 
 }
