@@ -1,4 +1,4 @@
-import {Port, SecurityGroup, SelectedSubnets, SubnetType} from "aws-cdk-lib/aws-ec2";
+import {Peer, Port, SecurityGroup, SelectedSubnets, SubnetType} from "aws-cdk-lib/aws-ec2";
 import {RepoBuildCtlVpc} from "./repo-build-ctl-vpc";
 import {
     CfnDBCluster,
@@ -70,12 +70,7 @@ export class RepoBuildCtlVpcRds extends Stack {
         // cfnCluster.enableCloudwatchLogsExports = ['postgresql'];
         // cfnCluster.performanceInsightsEnabled = true;
 
-        const usrFuncSg = new SecurityGroup(this, 'usr-fun-sg', {
-            vpc: vpcStack.vpc,
-            securityGroupName: pid + '-pg-schm-usr-fun-sg'
-        });
-
-        rdsClusterSg.addIngressRule(usrFuncSg, Port.tcp(this.rdsCluster.clusterEndpoint.port))
+        rdsClusterSg.addIngressRule(Peer.ipv4(vpcStack.vpcEnver.centralVpcCidr.getSharedValue(this)), Port.tcp(this.rdsCluster.clusterEndpoint.port))
         const myEnver = OndemandContracts.inst.defaultVpcRds.envers.find(e => e.targetRevision.toString() == OndemandContracts.REV_REF_value) as ContractsEnverCdkDefaultVpc;
 
         const masterRole = new Role(this, 'masterRole', {

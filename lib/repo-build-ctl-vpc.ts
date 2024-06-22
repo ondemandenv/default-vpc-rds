@@ -26,37 +26,31 @@ import {
 export class RepoBuildCtlVpc extends Stack {
 
     public readonly vpc: Vpc
+    public readonly vpcEnver: ContractsEnverCdkDefaultVpc
     public readonly privateSubnets: SelectedSubnets;
 
-    constructor(parent: App, m: ContractsEnverCdkDefaultVpc, props: StackProps) {
-        const revStr = m.targetRevision.type == 'b' ? m.targetRevision.value : m.targetRevision.toString();
-        super(parent, ContractsEnverCdk.SANITIZE_STACK_NAME(`${m.owner.buildId}--${revStr}`), props);
+    constructor(parent: App, vpcEnver: ContractsEnverCdkDefaultVpc, props: StackProps) {
+        const revStr = vpcEnver.targetRevision.type == 'b' ? vpcEnver.targetRevision.value : vpcEnver.targetRevision.toString();
+        super(parent, ContractsEnverCdk.SANITIZE_STACK_NAME(`${vpcEnver.owner.buildId}--${revStr}`), props);
+        this.vpcEnver = vpcEnver
 
-        if (m.owner.buildId == OndemandContracts.inst.networking.buildId) {
+        if (vpcEnver.owner.buildId == OndemandContracts.inst.networking.buildId) {
             throw new Error(`No vpc should be shared in ${OndemandContracts.inst.networking.buildId}`)
         }
 
-        const nwShares = [m.vpcConfig.ipAddresses.ipv4IpamPoolRef.producer]
-
-        const tgwRef = m.vpcConfig.transitGatewayRef
-        if (tgwRef) {
-            nwShares.push(tgwRef.producer)
-        }
-
-        const shareIn = new ContractsShareIn(this, m.owner.buildId, nwShares)
-
         const vpcProps = {
-            vpcName: m.vpcConfig.vpcName,
-            maxAzs: m.vpcConfig.maxAzs,
-            natGateways: m.vpcConfig.natGateways,
+            vpcName: vpcEnver.vpcConfig.vpcName,
+            maxAzs: vpcEnver.vpcConfig.maxAzs,
+            natGateways: vpcEnver.vpcConfig.natGateways,
             ipAddresses: IpAddresses.awsIpamAllocation({
-                ipv4IpamPoolId: shareIn.getShareValue(m.vpcConfig.ipAddresses.ipv4IpamPoolRef.producer) as string,
-                ipv4NetmaskLength: m.vpcConfig.ipAddresses.ipv4NetmaskLength,
-                defaultSubnetIpv4NetmaskLength: m.vpcConfig.ipAddresses.defaultSubnetIpv4NetmaskLength
+                ipv4IpamPoolId: vpcEnver.vpcConfig.ipAddresses.ipv4IpamPoolRef.getSharedValue(this),
+                ipv4NetmaskLength: vpcEnver.vpcConfig.ipAddresses.ipv4NetmaskLength,
+                defaultSubnetIpv4NetmaskLength: vpcEnver.vpcConfig.ipAddresses.defaultSubnetIpv4NetmaskLength
             })
         } as VpcProps;
 
-        this.vpc = new Vpc(this, this.stackName + '_vpc_' + m.vpcConfig.vpcName, vpcProps)
+
+        this.vpc = new Vpc(this, this.stackName + '_vpc_' + vpcEnver.vpcConfig.vpcName, vpcProps)
 
         new Set(this.vpc.privateSubnets.concat(this.vpc.publicSubnets).concat(this.vpc.isolatedSubnets)).forEach(sbn => {
             Tags.of(sbn).add('Name', OdmdNames.create(sbn, '', 255), {
@@ -77,17 +71,17 @@ export class RepoBuildCtlVpc extends Stack {
         }
 
         new ContractsShareOut(this, new Map<ContractsCrossRefProducer<AnyContractsEnVer>, string | number>([
-            [m.vpcConfig.ipAddresses.ipv4Cidr, this.vpc.vpcCidrBlock]
+            [vpcEnver.vpcConfig.ipAddresses.ipv4Cidr, this.vpc.vpcCidrBlock]
         ]))
 
-        if (tgwRef) {
+        if (vpcEnver.vpcConfig.transitGatewayRef) {
             if (this.privateSubnets.subnets.length == 0) {
                 throw new Error("privateSubnets.subnets.length == 0")
             }
 
             const tgwAttach = new CfnTransitGatewayAttachment(this, 'tgwAttach', {
                 vpcId: this.vpc.vpcId, subnetIds: this.privateSubnets.subnetIds,
-                transitGatewayId: shareIn.getShareValue(tgwRef.producer) as string
+                transitGatewayId: vpcEnver.vpcConfig.transitGatewayRef.getSharedValue( this )
             })
             this.privateSubnets.subnets.forEach((s, i) => {
                 const r = new CfnRoute(this, `tgw-${i}`, {
@@ -98,10 +92,10 @@ export class RepoBuildCtlVpc extends Stack {
                 r.addDependency(tgwAttach)
             })
         } else {
-            console.warn(`No TGW ~~~~ for build:${m.owner.buildId}, vpc:${vpcProps.vpcName}`)
+            console.warn(`No TGW ~~~~ for build:${vpcEnver.owner.buildId}, vpc:${vpcProps.vpcName}`)
         }
-        if (m.rdsConfigs.length > 0) {
-            m.rdsConfigs.forEach(r => {
+        if (vpcEnver.rdsConfigs.length > 0) {
+            vpcEnver.rdsConfigs.forEach(r => {
                 new RepoBuildCtlVpcRds(parent, this, r, props)
             })
         }

@@ -27,13 +27,13 @@ async function main() {
 
     const allMyEnvers = OndemandContracts.inst.defaultVpcRds.envers;
 
-    const m = allMyEnvers.find(e => e.targetRevision.toString() == OndemandContracts.REV_REF_value)!;
+    const defaultVpcEnver = allMyEnvers.find(e => e.targetRevision.toString() == OndemandContracts.REV_REF_value)!;
 
-    if (!m) {
+    if (!defaultVpcEnver) {
         throw new Error('no enver found!')
     }
 
-    new RepoBuildCtlVpc(app, m, props)
+    new RepoBuildCtlVpc(app, defaultVpcEnver, props)
 
 
 }
