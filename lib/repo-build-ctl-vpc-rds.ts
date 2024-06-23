@@ -71,6 +71,11 @@ export class RepoBuildCtlVpcRds extends Stack {
         // cfnCluster.performanceInsightsEnabled = true;
 
         rdsClusterSg.addIngressRule(Peer.ipv4(vpcStack.vpcEnver.centralVpcCidr.getSharedValue(this)), Port.tcp(this.rdsCluster.clusterEndpoint.port))
+
+        rds.allowingCIDRS.forEach(cidr => {
+            rdsClusterSg.addIngressRule(Peer.ipv4(cidr.getSharedValue(this)), Port.tcp(this.rdsCluster.clusterEndpoint.port))
+        })
+
         const myEnver = OndemandContracts.inst.defaultVpcRds.envers.find(e => e.targetRevision.toString() == OndemandContracts.REV_REF_value) as ContractsEnverCdkDefaultVpc;
 
         const masterRole = new Role(this, 'masterRole', {
