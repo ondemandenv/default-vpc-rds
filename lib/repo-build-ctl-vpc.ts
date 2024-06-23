@@ -13,7 +13,6 @@ import {RepoBuildCtlVpcRds} from "./repo-build-ctl-vpc-rds";
 import {
     AnyContractsEnVer,
     ContractsCrossRefProducer, ContractsEnverCdk,
-    ContractsShareIn,
     ContractsShareOut,
     OdmdNames,
     OndemandContracts
