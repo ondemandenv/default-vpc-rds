@@ -70,7 +70,7 @@ export class RepoBuildCtlVpc extends Stack {
         }
 
         new ContractsShareOut(this, new Map<ContractsCrossRefProducer<AnyContractsEnVer>, string | number>([
-            [vpcEnver.vpcConfig.ipAddresses.ipv4Cidr, this.vpc.vpcCidrBlock]
+            [vpcEnver.vpcIpv4Cidr, this.vpc.vpcCidrBlock]
         ]))
 
         if (vpcEnver.vpcConfig.transitGatewayRef) {
