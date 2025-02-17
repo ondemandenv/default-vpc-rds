@@ -10,31 +10,30 @@ import {
     VpcProps
 } from "aws-cdk-lib/aws-ec2";
 import {RepoBuildCtlVpcRds} from "./repo-build-ctl-vpc-rds";
+
 import {
-    AnyContractsEnVer,
-    ContractsCrossRefProducer, ContractsEnverCdk,
-    ContractsShareOut,
     OdmdNames,
-    OndemandContracts
-} from "@ondemandenv/odmd-contracts";
-import {
-    ContractsEnverCdkDefaultVpc
-} from "@ondemandenv/odmd-contracts/lib/repos/_default-vpc-rds/odmd-enver-default-vpc-rds";
+    OdmdShareOut,
+    OdmdCrossRefProducer,
+    OdmdEnverCdk,
+    OdmdEnverCdkDefaultVpc
+} from "@ondemandenv/contracts-lib-base";
+import {OndemandContractsSandbox} from "@ondemandenv/odmd-contracts-sandbox";
 
 
 export class RepoBuildCtlVpc extends Stack {
 
     public readonly vpc: Vpc
-    public readonly vpcEnver: ContractsEnverCdkDefaultVpc
+    public readonly vpcEnver: OdmdEnverCdkDefaultVpc
     public readonly privateSubnets: SelectedSubnets;
 
-    constructor(parent: App, vpcEnver: ContractsEnverCdkDefaultVpc, props: StackProps) {
+    constructor(parent: App, vpcEnver: OdmdEnverCdkDefaultVpc, props: StackProps) {
         const revStr = vpcEnver.targetRevision.type == 'b' ? vpcEnver.targetRevision.value : vpcEnver.targetRevision.toString();
-        super(parent, ContractsEnverCdk.SANITIZE_STACK_NAME(`${vpcEnver.owner.buildId}--${revStr}`), props);
+        super(parent, OdmdEnverCdk.SANITIZE_STACK_NAME(`${vpcEnver.owner.buildId}--${revStr}`), props);
         this.vpcEnver = vpcEnver
 
-        if (vpcEnver.owner.buildId == OndemandContracts.inst.networking.buildId) {
-            throw new Error(`No vpc should be shared in ${OndemandContracts.inst.networking.buildId}`)
+        if (vpcEnver.owner.buildId == OndemandContractsSandbox.inst.networking?.buildId) {
+            throw new Error(`No vpc should be shared in ${OndemandContractsSandbox.inst.networking?.buildId}`)
         }
 
         const vpcProps = {
@@ -69,7 +68,7 @@ export class RepoBuildCtlVpc extends Stack {
             this.privateSubnets = this.vpc.selectSubnets({subnetType: SubnetType.PRIVATE_ISOLATED});
         }
 
-        new ContractsShareOut(this, new Map<ContractsCrossRefProducer<AnyContractsEnVer>, string | number>([
+        new OdmdShareOut(this, new Map<OdmdCrossRefProducer<OdmdEnverCdkDefaultVpc>, string | number>([
             [vpcEnver.vpcIpv4Cidr, this.vpc.vpcCidrBlock]
         ]))
 
@@ -80,7 +79,7 @@ export class RepoBuildCtlVpc extends Stack {
 
             const tgwAttach = new CfnTransitGatewayAttachment(this, 'tgwAttach', {
                 vpcId: this.vpc.vpcId, subnetIds: this.privateSubnets.subnetIds,
-                transitGatewayId: vpcEnver.vpcConfig.transitGatewayRef.getSharedValue( this )
+                transitGatewayId: vpcEnver.vpcConfig.transitGatewayRef.getSharedValue(this)
             })
             this.privateSubnets.subnets.forEach((s, i) => {
                 const r = new CfnRoute(this, `tgw-${i}`, {

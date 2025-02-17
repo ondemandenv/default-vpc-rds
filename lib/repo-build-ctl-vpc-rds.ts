@@ -9,14 +9,14 @@ import {
 import {App, Stack, StackProps} from "aws-cdk-lib";
 import {RepoBuildCtlVpcRdsSchusrs} from "./repo-build-ctl-vpc-rds-schusrs";
 import {
-    AnyContractsEnVer,
-    ContractsCrossRefProducer, ContractsEnverCdk,
-    ContractsRdsCluster, ContractsShareOut, OndemandContracts,
-} from "@ondemandenv/odmd-contracts";
-import {
-    ContractsEnverCdkDefaultVpc
-} from "@ondemandenv/odmd-contracts/lib/repos/_default-vpc-rds/odmd-enver-default-vpc-rds";
+    AnyOdmdEnVer,
+    OdmdCrossRefProducer, OdmdEnverCdk,
+    OdmdRdsCluster, OdmdShareOut, OndemandContracts,
+    OdmdEnverCdkDefaultVpc
+} from "@ondemandenv/contracts-lib-base";
+
 import {ArnPrincipal, Policy, PolicyStatement, Role} from "aws-cdk-lib/aws-iam";
+import {OndemandContractsSandbox} from "@ondemandenv/odmd-contracts-sandbox";
 
 
 export class RepoBuildCtlVpcRds extends Stack {
@@ -24,8 +24,8 @@ export class RepoBuildCtlVpcRds extends Stack {
     private readonly vpcStack: RepoBuildCtlVpc
     private readonly rdsCluster: ServerlessCluster;
 
-    constructor(parent: App, vpcStack: RepoBuildCtlVpc, rds: ContractsRdsCluster, props: StackProps) {
-        super(parent, ContractsEnverCdk.SANITIZE_STACK_NAME(vpcStack.stackName + '-' + rds.clusterIdentifier), props);
+    constructor(parent: App, vpcStack: RepoBuildCtlVpc, rds: OdmdRdsCluster, props: StackProps) {
+        super(parent, OdmdEnverCdk.SANITIZE_STACK_NAME(vpcStack.stackName + '-' + rds.clusterIdentifier), props);
         this.vpcStack = vpcStack;
 
         const pid = `odmd-${rds.vpc.build.buildId}-${rds.vpc.vpcName}`
@@ -64,7 +64,7 @@ export class RepoBuildCtlVpcRds extends Stack {
                 }
             })
         });
-        const cfnCluster = this.rdsCluster.node.defaultChild as CfnDBCluster;
+        // const cfnCluster = this.rdsCluster.node.defaultChild as CfnDBCluster;
 
         //Aurora Serverless currently doesn't support CloudWatch Log Export.
         // cfnCluster.enableCloudwatchLogsExports = ['postgresql'];
@@ -76,10 +76,10 @@ export class RepoBuildCtlVpcRds extends Stack {
             rdsClusterSg.addIngressRule(Peer.ipv4(cidr.getSharedValue(this)), Port.tcp(this.rdsCluster.clusterEndpoint.port))
         })
 
-        const myEnver = OndemandContracts.inst.getTargetEnver() as ContractsEnverCdkDefaultVpc
+        const myEnver = OndemandContractsSandbox.inst.getTargetEnver() as OdmdEnverCdkDefaultVpc
 
         const masterRole = new Role(this, 'masterRole', {
-            assumedBy: new ArnPrincipal(`arn:aws:iam::${OndemandContracts.inst.accounts.central}:role/${
+            assumedBy: new ArnPrincipal(`arn:aws:iam::${OndemandContractsSandbox.inst.accounts.central}:role/${
                 myEnver.rdsTrustCentralRoleName
             }`)
         });
@@ -96,8 +96,8 @@ export class RepoBuildCtlVpcRds extends Stack {
         });
         masterRole.attachInlinePolicy(createUsrPolicy)
 
-        new ContractsShareOut(this, new Map<ContractsCrossRefProducer<AnyContractsEnVer>, string | number>(
-            new Map<ContractsCrossRefProducer<AnyContractsEnVer>, string | number>([
+        new OdmdShareOut(this, new Map<OdmdCrossRefProducer<AnyOdmdEnVer>, string | number>(
+            new Map<OdmdCrossRefProducer<AnyOdmdEnVer>, string | number>([
                 [rds.clusterHostname, this.rdsCluster.clusterEndpoint.hostname],
                 [rds.clusterPort, this.rdsCluster.clusterEndpoint.port],
                 [rds.clusterSocketAddress, this.rdsCluster.clusterEndpoint.socketAddress],
